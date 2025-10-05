@@ -215,23 +215,25 @@
     </div>
 
     <div id="main-content">
-        <nav>
-            <a href="agenda/agenda.html">Agenda</a>
-            <a href="#">Comparar Lugares</a>
-            <a href="#">Educacion</a>
-            <a href="#">Minijuegos</a>
-            <a href="{{ url_for('iniciosesion') }}">Login</a>
-            <a href="#">ChatBot</a>
-            <a href="#">Mi Perfil</a>
-        </nav>
+ <nav>
+    <a href="/inicio">Inicio</a>
+    <a href="{{ url_for('pronostico') }}">Pronóstico</a>
+    <a href="#">Agenda</a>
+    <a href="{{ url_for('comparar') }}">Comparar Lugares</a>
+    <a href="{{ url_for('educacion') }}">Educacion</a>
+    <a href="/juego">Minijuegos</a> 
+    <a href="{{ url_for('iniciosesion') }}">Login</a>
+    <a href="{{ url_for('perfil') }}">Mi Perfil</a>
+    <a href="{{ url_for('logout') }}" style="color:#ff6b6b;">Cerrar Sesión</a>
+</nav>
 
         <section class="hero">
             <img src="{{ url_for('static', filename='earth.png') }}" alt="Earth Transparent">
             <div class="hero-text">
                 <h1>ECOWHEATER</h1>
                 <p>Consult, learn and understand the weather intelligently.</p>
-                <button onclick="location.href='pronostico/pronostico.html'">See the weather now</button>
-                <button onclick="location.href='educational.html'">Explore educational section</button>
+                <button onclick="location.href='/pronostico'">See the weather now</button>
+                <button onclick="location.href='/educacion'">Explore educational section</button>
             </div>
         </section>
 
