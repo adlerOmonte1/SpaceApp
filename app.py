@@ -136,46 +136,51 @@ def obtener_ubicacion_osm(latitud, longitud):
     except Exception:
         return "Error de API", "N/A"
 
-# ---------------- 4. CONEXIÓN A LA BASE DE DATOS (CÓDIGO DE TUS AMIGOS) ----------------
+# ---------------- 4. CONEXIÓN Y ESTRUCTURA DE BASE DE DATOS ----------------
 def conectar(con_db=True):
-    """Permite conectar con o sin especificar la base de datos"""
-    if con_db:
-        return mysql.connector.connect(
-            host="localhost",
-            user="root",
-            password="",
-            database="login_db"
-        )
-    else:
-        return mysql.connector.connect(
-            host="localhost",
-            user="root",
-            password=""
-        )
+    db_config = {"host": "localhost", "user": "root", "password": ""}
+    if con_db: db_config["database"] = "login_db"
+    return mysql.connector.connect(**db_config)
 
-# ======== CREAR BASE DE DATOS Y TABLA ==========
+# --- FUNCIÓN INICIALIZAR_DB CORREGIDA ---
 def inicializar_db():
-    # Paso 1️⃣ Crear la base de datos si no existe
-    conexion = conectar(con_db=False)
-    cursor = conexion.cursor()
-    cursor.execute("CREATE DATABASE IF NOT EXISTS login_db")
-    cursor.close()
-    conexion.close()
+    """Crea la base de datos y las tablas de usuarios y eventos si no existen."""
+    try:
+        # 1. Crear DB
+        conexion = conectar(con_db=False)
+        cursor = conexion.cursor()
+        cursor.execute("CREATE DATABASE IF NOT EXISTS login_db")
+        cursor.close()
+        conexion.close()
 
-    # Paso 2️⃣ Conectarse ahora sí a la base de datos
-    conexion = conectar(con_db=True)
-    cursor = conexion.cursor()
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS usuarios (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            username VARCHAR(50) UNIQUE NOT NULL,
-            password VARCHAR(255) NOT NULL
-        )
-    """)
-    conexion.commit()
-    cursor.close()
-    conexion.close()
-
+        # 2. Crear tablas
+        conexion = conectar(con_db=True)
+        cursor = conexion.cursor()
+        # Crear tabla de usuarios
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS usuarios (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                username VARCHAR(50) UNIQUE NOT NULL,
+                password VARCHAR(255) NOT NULL
+            )
+        """)
+        # --- ¡NUEVO! Crear tabla de eventos ---
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS eventos (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                usuario_id INT NOT NULL,
+                titulo VARCHAR(255) NOT NULL,
+                descripcion TEXT,
+                fecha_evento DATETIME NOT NULL,
+                FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+            )
+        """)
+        conexion.commit()
+        cursor.close()
+        conexion.close()
+        print("✅ Base de datos y tablas verificadas/creadas.")
+    except Exception as e:
+        print(f"❌ Error al inicializar la base de datos: {e}")
 # ---------------- 5. RUTAS DE LA APLICACIÓN WEB ----------------
 
 # Rutas para las páginas principales (CÓDIGO DE TUS AMIGOS)
@@ -186,6 +191,10 @@ def index():
 @app.route('/inicio')
 def inicio():
     return render_template('index.html')
+
+@app.route('/agenda')
+def agenda():
+    return render_template('agenda.html')
 
 @app.route('/info')
 def info_clima():
@@ -332,7 +341,132 @@ def search_location():
             return jsonify({'error': f"No se encontraron resultados para '{place_name}'."}), 404
     except Exception as e:
         return jsonify({'error': f"Error en la API de búsqueda: {e}"}), 500
+# --- ¡NUEVAS APIS PARA LA AGENDA! ---
+@app.route('/api/agendar_evento', methods=['POST'])
+def agendar_evento():
+    if 'usuario' not in session:
+        return jsonify({'error': 'No autorizado', 'reason': 'No has iniciado sesión.'}), 401
+    
+    data = request.json
+    titulo = data.get('titulo')
+    fecha = data.get('fecha')
+    hora = data.get('hora')
+    descripcion = data.get('descripcion', '')
 
+    if not all([titulo, fecha, hora]):
+        return jsonify({'error': 'Faltan datos en la solicitud.'}), 400
+
+    fecha_evento_str = f"{fecha} {hora}"
+    
+    conexion = None
+    try:
+        conexion = conectar()
+        cursor = conexion.cursor(dictionary=True)
+        
+        cursor.execute("SELECT id FROM usuarios WHERE username = %s", (session['usuario'],))
+        user = cursor.fetchone()
+        if not user:
+            return jsonify({'error': 'Usuario no encontrado en la base de datos.'}), 404
+        usuario_id = user['id']
+
+        insert_cursor = conexion.cursor()
+        sql_query = "INSERT INTO eventos (usuario_id, titulo, descripcion, fecha_evento) VALUES (%s, %s, %s, %s)"
+        # --- ¡CORRECCIÓN! Se ha eliminado el 'usuario_id' duplicado ---
+        sql_values = (usuario_id, titulo, descripcion, fecha_evento_str)
+        insert_cursor.execute(sql_query, sql_values)
+        
+        conexion.commit()
+        insert_cursor.close()
+        return jsonify({'mensaje': 'Evento agendado con éxito'}), 201
+    except Exception as e:
+        if conexion: conexion.rollback()
+        print(f"❌ Error al agendar evento en la base de datos: {e}")
+        return jsonify({'error': f'Error en el servidor: {e}'}), 500
+    finally:
+        if conexion:
+            conexion.close()
+
+@app.route('/api/get_events', methods=['GET'])
+def get_events():
+    if 'usuario' not in session:
+        return jsonify({'error': 'No autorizado'}), 401
+
+    conexion = None
+    try:
+        conexion = conectar()
+        cursor = conexion.cursor(dictionary=True)
+        # Obtenemos el ID del usuario actual
+        cursor.execute("SELECT id FROM usuarios WHERE username = %s", (session['usuario'],))
+        user = cursor.fetchone()
+        if not user:
+            return jsonify({'error': 'Usuario no encontrado'}), 404
+        user_id = user['id']
+
+        # Buscamos todos los eventos de ese usuario
+        cursor.execute("SELECT lugar, fecha_hora, descripcion FROM eventos WHERE user_id = %s", (user_id,))
+        eventos_db = cursor.fetchall()
+        
+        # Formateamos los eventos para el frontend
+        eventos_json = {}
+        for evento in eventos_db:
+            fecha = evento['fecha_hora'].strftime('%Y-%m-%d')
+            if fecha not in eventos_json:
+                eventos_json[fecha] = []
+            eventos_json[fecha].append({
+                'title': evento['lugar'],
+                'desc': evento['descripcion']
+            })
+        
+        cursor.close()
+        return jsonify(eventos_json)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    finally:
+        if conexion:
+            conexion.close()
+
+@app.route('/api/obtener_eventos', methods=['GET'])
+def obtener_eventos():
+    if 'usuario' not in session:
+        return jsonify({'error': 'No autorizado'}), 401
+
+    conexion = None
+    try:
+        conexion = conectar()
+        cursor = conexion.cursor(dictionary=True)
+        
+        # 1. Obtener el ID del usuario actual de la sesión
+        cursor.execute("SELECT id FROM usuarios WHERE username = %s", (session['usuario'],))
+        user = cursor.fetchone()
+        if not user:
+            return jsonify({'error': 'Usuario no encontrado'}), 404
+        usuario_id = user['id']
+
+        # 2. Buscar todos los eventos de ese usuario en la base de datos
+        cursor.execute("SELECT titulo, descripcion, fecha_evento FROM eventos WHERE usuario_id = %s", (usuario_id,))
+        eventos_db = cursor.fetchall()
+        
+        # 3. Formatear los eventos al formato JSON que el calendario espera
+        eventos_para_frontend = {}
+        for evento in eventos_db:
+            fecha_str = evento['fecha_evento'].strftime('%Y-%m-%d')
+            if fecha_str not in eventos_para_frontend:
+                eventos_para_frontend[fecha_str] = []
+            
+            eventos_para_frontend[fecha_str].append({
+                'title': evento['titulo'],
+                'desc': evento['descripcion']
+            })
+        
+        cursor.close()
+        return jsonify(eventos_para_frontend)
+
+    except Exception as e:
+        print(f"❌ Error al obtener eventos: {e}")
+        return jsonify({'error': str(e)}), 500
+    finally:
+        if conexion:
+            conexion.close()
 # --- Rutas de Autenticación de Usuarios (CORREGIDAS Y UNIFICADAS) ---
 @app.route('/login', methods=['POST'])
 def login():
@@ -360,7 +494,7 @@ def login():
                 session['usuario'] = usuario
                 mensaje = f"✅ Bienvenido, {usuario}"
                 # Redirigir al perfil si quieres que inicie sesión automáticamente
-                return redirect(url_for('perfil'))
+                return redirect(url_for('inicio'))
             else:
                 mensaje = "❌ Usuario o contraseña incorrectos."
         else:
