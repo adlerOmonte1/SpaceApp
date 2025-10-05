@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Perfil de {{ usuario }}</title>
-  <style>
+  <title>Profile of {{ usuario }}</title>
+  <style>  
     @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap');
     * { margin:0; padding:0; box-sizing:border-box; }
     body { font-family:'Outfit',sans-serif; background: radial-gradient(circle at 25% 25%, #0a1930,#00010f 80%); color:#eaf2ff; overflow-x:hidden; }
@@ -29,29 +29,29 @@
 <body>
 
   <!-- NAVBAR -->
- <nav>
-  <a href="/inicio">Inicio</a>
-    <a href="{{ url_for('pronostico') }}">Pronóstico</a>
-    <a href="#">Agenda</a>
-    <a href="{{ url_for('comparar') }}">Comparar Lugares</a>
-    <a href="{{ url_for('educacion') }}">Educacion</a>
-    <a href="/juego">Minijuegos</a> 
+  <nav>
+    <a href="/inicio">Home</a>
+    <a href="{{ url_for('pronostico') }}">Forecast</a>
+    <a href="#">Schedule</a>
+    <a href="{{ url_for('comparar') }}">Compare Locations</a>
+    <a href="{{ url_for('educacion') }}">Education</a>
+    <a href="/juego">Mini Games</a> 
     <a href="{{ url_for('iniciosesion') }}">Login</a>
-    <a href="{{ url_for('perfil') }}">Mi Perfil</a>
-    <a href="{{ url_for('logout') }}" style="color:#ff6b6b;">Cerrar Sesión</a>
-</nav>
+    <a href="{{ url_for('perfil') }}">My Profile</a>
+    <a href="{{ url_for('logout') }}" style="color:#ff6b6b;">Log Out</a>
+  </nav>
 
-  <!-- CONTENIDO -->
+  <!-- CONTENT -->
   <div class="container">
-      <h2>👨‍🚀 Bienvenido, {{ usuario }}</h2>
-      <p>Aquí puedes cambiar tu contraseña:</p>
+      <h2>👨‍🚀 Welcome, {{ usuario }}</h2>
+      <p>Here you can change your password:</p>
 
-      <!-- Formulario de cambio de contraseña -->
+      <!-- Password change form -->
       <form action="{{ url_for('actualizar_password') }}" method="post">
           <input type="hidden" name="username" value="{{ usuario }}">
-          <input type="password" name="old_password" placeholder="Contraseña actual" required>
-          <input type="password" name="new_password" placeholder="Nueva contraseña" required>
-          <input type="submit" value="Actualizar contraseña">
+          <input type="password" name="old_password" placeholder="Current password" required>
+          <input type="password" name="new_password" placeholder="New password" required>
+          <input type="submit" value="Update password">
       </form>
 
       {% if mensaje %}
@@ -59,7 +59,7 @@
       {% endif %}
 
       <form action="{{ url_for('inicio') }}" method="get">
-          <button type="submit">Volver al inicio</button>
+          <button type="submit">Back to home</button>
       </form>
   </div>
 

@@ -1,62 +1,61 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EcoWeather - Pronóstico</title>
-    <!-- Librerías Externas -->
+    <title>EcoWeather - Forecast</title>
+    <!-- External Libraries -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
-    <!-- Enlace a tus archivos locales (CORREGIDO PARA FLASK) -->
+    <!-- Link to your local files (FIXED FOR FLASK) -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/pronostico.css') }}">
 </head>
 <body>
     <!-- NAVBAR -->
     <header>
-          <nav>
- <nav>
-    <a href="/inicio">Inicio</a>
-    <a href="{{ url_for('pronostico') }}">Pronóstico</a>
-    <a href="#">Agenda</a>
-    <a href="{{ url_for('comparar') }}">Comparar Lugares</a>
-    <a href="{{ url_for('educacion') }}">Educacion</a>
-    <a href="/juego">Minijuegos</a> 
-    <a href="{{ url_for('iniciosesion') }}">Login</a>
-    <a href="{{ url_for('perfil') }}">Mi Perfil</a>
-    <a href="{{ url_for('logout') }}" style="color:#ff6b6b;">Cerrar Sesión</a>
-</nav>
+        <nav>
+            <a href="/inicio">Home</a>
+            <a href="{{ url_for('pronostico') }}">Forecast</a>
+            <a href="#">Schedule</a>
+            <a href="{{ url_for('comparar') }}">Compare Locations</a>
+            <a href="{{ url_for('educacion') }}">Education</a>
+            <a href="/juego">Mini Games</a> 
+            <a href="{{ url_for('iniciosesion') }}">Login</a>
+            <a href="{{ url_for('perfil') }}">My Profile</a>
+            <a href="{{ url_for('logout') }}" style="color:#ff6b6b;">Logout</a>
+        </nav>
     </header>
 
-    <!-- SECCIÓN PRINCIPAL -->
+    <!-- MAIN SECTION -->
     <main class="pronostico">
         <div class="container">
             <header>
-                <h2>Pronóstico Climatológico Detallado</h2>
-                <p class="subtitle">Busca un lugar por nombre, selecciona un punto en el mapa o ingresa coordenadas para obtener una predicción climatológica avanzada.</p>
+                <h2>Detailed Weather Forecast</h2>
+                <p class="subtitle">Search for a place by name, select a point on the map, or enter coordinates to get an advanced weather prediction.</p>
             </header>
 
-            <!-- ¡NUEVA SECCIÓN DE BÚSQUEDA AÑADIDA! -->
+            <!-- NEW SEARCH SECTION -->
             <div class="search-container">
-                <input type="text" id="search-input" placeholder="Buscar lugar en Perú (ej. Machu Picchu, Tingo Maria)...">
-                <button id="search-btn">Buscar</button>
+                <input type="text" id="search-input" placeholder="Search for a place in Peru (e.g., Machu Picchu, Tingo Maria)...">
+                <button id="search-btn">Search</button>
             </div>
             
             <div id="map"></div>
             
             <div class="form-container">
                 <div class="input-group">
-                    <input type="text" id="manual-lat" placeholder="Latitud (ej. -9.93)">
-                    <input type="text" id="manual-lon" placeholder="Longitud (ej. -76.24)">
+                    <input type="text" id="manual-lat" placeholder="Latitude (e.g., -9.93)">
+                    <input type="text" id="manual-lon" placeholder="Longitude (e.g., -76.24)">
                     <input type="date" id="manual-date">
                     <input type="time" id="manual-time" value="14:00">
                 </div>
-                <button id="get-manual-btn">Consultar Datos</button>
+                <button id="get-manual-btn">Get Data</button>
             </div>
 
             <div class="results" id="results">
-                <!-- Los resultados y el gráfico aparecerán aquí -->
+                <!-- The results and chart will appear here -->
             </div>
         </div>
     </main>

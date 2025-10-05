@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Perfil - Acceso</title>
+  <title>Profile - Access</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap');
 
@@ -78,7 +78,7 @@
       text-shadow: 0 0 8px #ff3b3b;
     }
 
-    /* CONTENEDOR */
+    /* CONTAINER */
     .container {
       max-width: 500px;
       margin: 120px auto 50px;
@@ -117,33 +117,33 @@
 <body>
 
   <!-- NAVBAR -->
- <nav>
-  <a href="/inicio">Inicio</a>
-    <a href="{{ url_for('pronostico') }}">Pronóstico</a>
-    <a href="#">Agenda</a>
-    <a href="{{ url_for('comparar') }}">Comparar Lugares</a>
-    <a href="{{ url_for('educacion') }}">Educacion</a>
-    <a href="/juego">Minijuegos</a> 
+  <nav>
+    <a href="/inicio">Home</a>
+    <a href="{{ url_for('pronostico') }}">Forecast</a>
+    <a href="#">Schedule</a>
+    <a href="{{ url_for('comparar') }}">Compare Locations</a>
+    <a href="{{ url_for('educacion') }}">Education</a>
+    <a href="/juego">Mini Games</a>
     <a href="{{ url_for('iniciosesion') }}">Login</a>
-    <a href="{{ url_for('perfil') }}">Mi Perfil</a>
-    <a href="{{ url_for('logout') }}" style="color:#ff6b6b;">Cerrar Sesión</a>
-</nav>
+    <a href="{{ url_for('perfil') }}">My Profile</a>
+    <a href="{{ url_for('logout') }}" style="color:#ff6b6b;">Log Out</a>
+  </nav>
 
-  <!-- CONTENIDO -->
+  <!-- CONTENT -->
   <div class="container">
-    <h2>🌌 Bienvenido al área de perfil</h2>
-    <p>No has iniciado sesión todavía.</p>
+    <h2>Welcome to your profile area</h2>
+    <p>You haven’t logged in yet.</p>
 
     <form action="{{ url_for('login') }}" method="get">
-      <input type="submit" value="🔐 Iniciar sesión">
+      <input type="submit" value="Log In">
     </form>
 
     <form action="{{ url_for('registro') }}" method="get">
-      <input type="submit" value="🧾 Registrarse">
+      <input type="submit" value="Register">
     </form>
 
     <form action="{{ url_for('inicio') }}" method="get">
-      <input type="submit" value="🚀 Continuar sin cuenta">
+      <input type="submit" value="Continue without an account">
     </form>
   </div>
 

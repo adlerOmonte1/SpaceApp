@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EcoWheater - Registro</title>
+  <title>EcoWheater - Register</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap');
 
@@ -71,7 +71,7 @@
       text-shadow: 0 0 8px #66aaff;
     }
 
-    /* REGISTRO CONTAINER */
+    /* REGISTER CONTAINER */
     .container {
       flex: 1;
       display: flex;
@@ -155,7 +155,7 @@
       text-shadow: 0 0 8px #66aaff;
     }
 
-    .mensaje {
+    .message {
       margin-top: 15px;
       font-size: 0.95em;
       color: #f8bcbc;
@@ -186,15 +186,16 @@
         transform: translateY(0);
       }
     }
-        nav a.logout {
-    color: #ff6b6b;
-    font-weight: 600;
-}
 
-nav a.logout:hover {
-    color: #ff3b3b;
-    text-shadow: 0 0 8px #ff3b3b;
-}
+    nav a.logout {
+      color: #ff6b6b;
+      font-weight: 600;
+    }
+
+    nav a.logout:hover {
+      color: #ff3b3b;
+      text-shadow: 0 0 8px #ff3b3b;
+    }
   </style>
 </head>
 
@@ -202,30 +203,31 @@ nav a.logout:hover {
 
   <!-- NAVBAR -->
   <nav>
-    <a href="/inicio">Inicio</a>
-    <a href="{{ url_for('pronostico') }}">Pronóstico</a>
-    <a href="#">Agenda</a>
-    <a href="{{ url_for('comparar') }}">Comparar Lugares</a>
-    <a href="{{ url_for('educacion') }}">Educacion</a>
-    <a href="/juego">Minijuegos</a> 
+    <a href="/inicio">Home</a>
+    <a href="{{ url_for('pronostico') }}">Forecast</a>
+    <a href="#">Schedule</a>
+    <a href="{{ url_for('comparar') }}">Compare Places</a>
+    <a href="{{ url_for('educacion') }}">Education</a>
+    <a href="/juego">Mini Games</a> 
     <a href="{{ url_for('iniciosesion') }}">Login</a>
-    <a href="{{ url_for('perfil') }}">Mi Perfil</a>
-    <a href="{{ url_for('logout') }}" style="color:#ff6b6b;">Cerrar Sesión</a>
-</nav>
-  <!-- REGISTRO FORM -->
+    <a href="{{ url_for('perfil') }}">My Profile</a>
+    <a href="{{ url_for('logout') }}" class="logout">Log Out</a>
+  </nav>
+
+  <!-- REGISTER FORM -->
   <div class="container">
     <div class="register-box">
-      <h2>Registrar Usuario</h2>
+      <h2>Register User</h2>
       <form action="{{ url_for('registrar') }}" method="POST">
 
-        <input type="text" name="username" placeholder="Usuario" required>
-        <input type="password" name="password" placeholder="Contraseña" required>
-        <input type="submit" value="Registrar">
+        <input type="text" name="username" placeholder="Username" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <input type="submit" value="Register">
       </form>
-      <p><a href="{{ url_for('iniciosesion') }}">Volver al login</a></p>
+      <p><a href="{{ url_for('iniciosesion') }}">Back to Login</a></p>
 
       {% if mensaje %}
-      <p class="mensaje">{{ mensaje }}</p>
+      <p class="message">{{ mensaje }}</p>
       {% endif %}
     </div>
   </div>

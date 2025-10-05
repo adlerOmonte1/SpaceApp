@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rompecabezas</title>
+<title>Puzzle</title>
 
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
@@ -20,7 +20,6 @@
     min-height:100vh;
   }
 
-  /* ===== NAVBAR (mismo estilo que usas) ===== */
   nav{
     position:fixed; top:0; left:0; width:100%;
     display:flex; justify-content:center; gap:40px; padding:18px 0;
@@ -39,7 +38,7 @@
   nav a:hover::after{ width:100%; }
   nav a:hover{ color:#66aaff; text-shadow:0 0 8px #66aaff; }
 
-  .wrap{max-width:1200px;margin:0 auto;padding:130px 6% 40px} /* +espacio por nav fijo */
+  .wrap{max-width:1200px;margin:0 auto;padding:130px 6% 40px}
   header.hd{text-align:center;margin-bottom:18px}
   header.hd h1{color:#89c4ff;text-shadow:0 0 10px rgba(102,170,255,.25)}
   header.hd p{color:#c9d8ff;opacity:.95}
@@ -111,65 +110,59 @@
 </head>
 <body>
 
-  <!-- NAVBAR (enlaces de ejemplo; NO cambié el resto de links de tu página) -->
 <nav>
-  <a href="/inicio">Inicio</a>
-    <a href="/pronostico">Pronóstico</a>
-    <a href="#">Agenda</a>
-    <a href="/comparar">Comparar Lugares</a>
-    <a href="/educacion">Educación</a>
-    <a href="/juego">Minijuegos</a>
-    <a href="/login">Login</a>
-    <a href="/perfil">Mi Perfil</a>
-    <a href="/logout" style="color:#ff6b6b;">Cerrar Sesión</a>
+  <a href="/inicio">Home</a>
+  <a href="/pronostico">Forecast</a>
+  <a href="#">Schedule</a>
+  <a href="/comparar">Compare Places</a>
+  <a href="/educacion">Education</a>
+  <a href="/juego">Mini Games</a>
+  <a href="/login">Login</a>
+  <a href="/perfil">My Profile</a>
+  <a href="/logout" style="color:#ff6b6b;">Logout</a>
 </nav>
 
-  <div class="wrap">
-    <header class="hd">
-      <h1>Rompecabezas</h1>
-      <p>Arrastra las piezas hasta formar la imagen.</p>
-    </header>
+<div class="wrap">
+  <header class="hd">
+    <h1>Puzzle</h1>
+    <p>Drag the pieces to complete the image.</p>
+  </header>
 
-    <div class="topbar">
-      <div class="stat">
-        <span class="badge" id="dimBadge">0×0</span>
-        <span class="badge">Movimientos: <b id="moves">0</b></span>
-        <span class="badge">Tiempo: <b id="time">00:00</b></span>
-      </div>
-      <div class="actions">
-     
-        <button class="btn" id="btnReiniciar">Reiniciar</button>
-        <!-- NO modificado -->
-        <a class="btn main" href="/juego/personalizado">← Volver</a>
-      </div>
+  <div class="topbar">
+    <div class="stat">
+      <span class="badge" id="dimBadge">0×0</span>
+      <span class="badge">Moves: <b id="moves">0</b></span>
+      <span class="badge">Time: <b id="time">00:00</b></span>
     </div>
-
-    <div class="board-wrap">
-      <div class="board" id="board"></div>
-
-      <aside class="side">
-        <h3>Vista previa</h3>
-        <div class="thumb"><img id="thumb" alt="Vista previa"></div>
-        <p class="help">Consejo: si las piezas no entran “justo”, amplía la ventana del navegador para que el tablero sea más grande.</p>
-      </aside>
+    <div class="actions">
+      <button class="btn" id="btnReiniciar">Restart</button>
+      <a class="btn main" href="/juego/personalizado">← Back</a>
     </div>
   </div>
 
-  <!-- Overlay de victoria -->
-  <div class="win" id="win">
-    <div class="win-box">
-      <h2>¡Completado! 🎉</h2>
-      <p>Tiempo: <b id="wTime">00:00</b> · Movimientos: <b id="wMoves">0</b></p>
-      <div style="margin-top:12px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap">
-        <button class="btn" id="btnAgain">Jugar de nuevo</button>
-        <!-- NO modificado -->
-        <a class="btn main" href="/juego/personalizado">Volver</a>
-      </div>
+  <div class="board-wrap">
+    <div class="board" id="board"></div>
+
+    <aside class="side">
+      <h3>Preview</h3>
+      <div class="thumb"><img id="thumb" alt="Preview"></div>
+      <p class="help">Tip: If the pieces don't fit perfectly, try enlarging your browser window to make the board bigger.</p>
+    </aside>
+  </div>
+</div>
+
+<div class="win" id="win">
+  <div class="win-box">
+    <h2>Completed! 🎉</h2>
+    <p>Time: <b id="wTime">00:00</b> · Moves: <b id="wMoves">0</b></p>
+    <div style="margin-top:12px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap">
+      <button class="btn" id="btnAgain">Play Again</button>
+      <a class="btn main" href="/juego/personalizado">Back</a>
     </div>
   </div>
+</div>
 
 <script>
-/* ===================== UTIL ===================== */
 const $ = sel => document.querySelector(sel);
 const clamp = (v,min,max)=> Math.max(min, Math.min(max, v));
 function getHashParam(name){
@@ -193,14 +186,12 @@ function bestFactorPair(n){
   return {rows:bestR, cols:bestC, exact};
 }
 
-/* ===================== ENTRADAS ===================== */
 const imgData = getHashParam('img') || sessionStorage.getItem('rompecabezas_imagen');
 const nPieces = Number(getHashParam('n')) || Number(sessionStorage.getItem('rompecabezas_piezas')) || 16;
-if (!imgData){ alert("No hay imagen. Vuelve y elige una."); location.href="./inicio.html"; }
+if (!imgData){ alert("No image found. Please go back and choose one."); location.href="./inicio.html"; }
 
 $('#thumb').src = imgData;
 
-/* ===================== CONFIG TABLERO ===================== */
 const board = $('#board');
 const dimBadge = $('#dimBadge');
 const movesEl = $('#moves');
@@ -208,8 +199,8 @@ const timeEl = $('#time');
 
 let timer=null, seconds=0, moves=0;
 let rows=0, cols=0;
-let order=[];        // orden actual (índices)
-let solvedOrder=[];  // 0..tiles-1
+let order=[];        
+let solvedOrder=[];  
 let tiles=0;
 
 function startTimer(){
@@ -241,7 +232,6 @@ function createBoard(){
   startTimer();
 }
 
-// Fisher-Yates
 function shuffle(a){
   for (let i=a.length-1; i>0; i--){
     const j = Math.floor(Math.random()*(i+1));
@@ -301,9 +291,6 @@ function checkWin(){
   $('#win').style.display = 'grid';
 }
 
-/* ===================== CONTROLES ===================== */
-
-
 $('#btnReiniciar').addEventListener('click', ()=>{
   moves = 0; movesEl.textContent = "0";
   startTimer();
@@ -316,13 +303,12 @@ $('#btnAgain').addEventListener('click', ()=>{
   $('#btnReiniciar').click();
 });
 
-/* ===================== INIT ===================== */
 createBoard();
 </script>
 
-  <footer>
-    © 2025 EcoWheater | Designed with 💙 for el planeta
-  </footer>
+<footer>
+  © 2025 EcoWheater | Designed with 💙 for the planet
+</footer>
 
 </body>
 </html>

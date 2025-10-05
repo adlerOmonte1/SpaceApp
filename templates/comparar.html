@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>Clima Comparado | EcoWeather</title>
+    <title>Compared Weather | EcoWeather</title>
     <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts -->
@@ -13,45 +12,47 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
     <!-- Material Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
-    <!-- Leaflet (para los mapas) -->
+    <!-- Leaflet (for maps) -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <!-- Estilos personalizados -->
+    <!-- Custom Styles -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/comparar.css') }}">
 </head>
 <body class="bg-gradient-to-b from-[#0a1930] to-[#00010f] font-display text-white min-h-screen flex flex-col">
     <!-- HEADER -->
     <header>
- <nav>
-    <a href="/inicio">Inicio</a>
-    <a href="{{ url_for('pronostico') }}">Pronóstico</a>
-    <a href="#">Agenda</a>
-    <a href="{{ url_for('comparar') }}">Comparar Lugares</a>
-    <a href="{{ url_for('educacion') }}">Educacion</a>
-    <a href="/juego">Minijuegos</a> 
-    <a href="{{ url_for('iniciosesion') }}">Login</a>
-    <a href="{{ url_for('perfil') }}">Mi Perfil</a>
-    <a href="{{ url_for('logout') }}" style="color:#ff6b6b;">Cerrar Sesión</a>
-</nav>
+        <nav>
+            <a href="/inicio">Home</a>
+            <a href="{{ url_for('pronostico') }}">Forecast</a>
+            <a href="#">Schedule</a>
+            <a href="{{ url_for('comparar') }}">Compare Locations</a>
+            <a href="{{ url_for('educacion') }}">Education</a>
+            <a href="/juego">Mini Games</a> 
+            <a href="{{ url_for('iniciosesion') }}">Login</a>
+            <a href="{{ url_for('perfil') }}">My Profile</a>
+            <a href="{{ url_for('logout') }}" style="color:#ff6b6b;">Log Out</a>
+        </nav>
     </header>
+
     <!-- MAIN -->
     <main class="flex-grow pt-28 pb-12 comparison-section">
         <div class="hero-text">
-            <h1>COMPARACIÓN DE DOS CIUDADES</h1>
+            <h1>COMPARISON BETWEEN TWO CITIES</h1>
         </div>
         <div class="comparison-card-container">
-            <!-- Tarjeta 1 (se generará con JS) -->
+            <!-- Card 1 (generated with JS) -->
             <div id="card1" class="comparison-card"></div>
-            <!-- Tarjeta 2 (se generará con JS) -->
+            <!-- Card 2 (generated with JS) -->
             <div id="card2" class="comparison-card"></div>
         </div>
     </main>
+
     <!-- FOOTER -->
     <footer class="text-center py-6 text-sm text-gray-400 border-t border-white/10 bg-[#02040c]">
-        © 2025 EcoWeather | Diseñado con 💙 para el planeta
+        © 2025 EcoWeather | Designed with 💙 for the planet
     </footer>
+
     <!-- Script -->
     <script src="{{ url_for('static', filename='js/comparar.js') }}"></script>
 </body>
 </html>
-

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EcoWheater - Login</title>
+  <title>EcoWeather - Login</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap');
 
@@ -175,6 +175,16 @@
       margin-top: auto;
     }
 
+    nav a.logout {
+      color: #ff6b6b;
+      font-weight: 600;
+    }
+
+    nav a.logout:hover {
+      color: #ff3b3b;
+      text-shadow: 0 0 8px #ff3b3b;
+    }
+
     @keyframes fadeInUp {
       0% {
         opacity: 0;
@@ -186,44 +196,35 @@
         transform: translateY(0);
       }
     }
-        nav a.logout {
-    color: #ff6b6b;
-    font-weight: 600;
-}
-
-nav a.logout:hover {
-    color: #ff3b3b;
-    text-shadow: 0 0 8px #ff3b3b;
-}
   </style>
 </head>
 
 <body>
 
   <!-- NAVBAR -->
-   <nav>
-    <a href="/inicio">Inicio</a>
-    <a href="{{ url_for('pronostico') }}">Pronóstico</a>
-    <a href="#">Agenda</a>
-    <a href="{{ url_for('comparar') }}">Comparar Lugares</a>
-    <a href="{{ url_for('educacion') }}">Educacion</a>
-    <a href="/juego">Minijuegos</a> 
+  <nav>
+    <a href="/inicio">Home</a>
+    <a href="{{ url_for('pronostico') }}">Forecast</a>
+    <a href="#">Schedule</a>
+    <a href="{{ url_for('comparar') }}">Compare Locations</a>
+    <a href="{{ url_for('educacion') }}">Education</a>
+    <a href="/juego">Mini Games</a> 
     <a href="{{ url_for('iniciosesion') }}">Login</a>
-    <a href="{{ url_for('perfil') }}">Mi Perfil</a>
-    <a href="{{ url_for('logout') }}" style="color:#ff6b6b;">Cerrar Sesión</a>
-</nav>
+    <a href="{{ url_for('perfil') }}">My Profile</a>
+    <a href="{{ url_for('logout') }}" class="logout">Logout</a>
+  </nav>
 
   <!-- LOGIN FORM -->
   <div class="container">
     <div class="login-box">
-      <h2>🚀 Iniciar Sesión</h2>
+      <h2>🚀 Log In</h2>
       <form action="{{ url_for('login') }}" method="POST">
-        <input type="text" name="username" placeholder="Usuario" required>
-        <input type="password" name="password" placeholder="Contraseña" required>
-        <input type="submit" value="Entrar">
+        <input type="text" name="username" placeholder="Username" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <input type="submit" value="Enter">
       </form>
-      <p><a href="{{ url_for('registro') }}">Registrar nuevo usuario</a></p>
-      <p><a href="{{ url_for('cambiar_password') }}">Cambiar contraseña</a></p>
+      <p><a href="{{ url_for('registro') }}">Register a new user</a></p>
+      <p><a href="{{ url_for('cambiar_password') }}">Change password</a></p>
 
       {% if mensaje %}
       <p class="mensaje">{{ mensaje }}</p>
@@ -233,7 +234,7 @@ nav a.logout:hover {
 
   <!-- FOOTER -->
   <footer>
-    © 2025 EcoWheater | Designed with 💙 for the planet
+    © 2025 EcoWeather | Designed with 💙 for the planet
   </footer>
 
 </body>

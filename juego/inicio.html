@@ -138,18 +138,17 @@
 <body>
 
   <!-- NAVBAR -->
-<nav>
-  <a href="/inicio">Inicio</a>
-    <a href="/pronostico">Pronóstico</a>
-    <a href="#">Agenda</a>
-    <a href="/comparar">Comparar Lugares</a>
-    <a href="/educacion">Educación</a>
-    <a href="/juego">Minijuegos</a>
+  <nav>
+    <a href="/inicio">Home</a>
+    <a href="/pronostico">Forecast</a>
+    <a href="#">Schedule</a>
+    <a href="/comparar">Compare Places</a>
+    <a href="/educacion">Education</a>
+    <a href="/juego">Mini Games</a>
     <a href="/login">Login</a>
-    <a href="/perfil">Mi Perfil</a>
-    <a href="/logout" style="color:#ff6b6b;">Cerrar Sesión</a>
-</nav>
-
+    <a href="/perfil">My Profile</a>
+    <a href="/logout" style="color:#ff6b6b;">Logout</a>
+  </nav>
 
   <!-- Capa de animación clima -->
  <div class="page-anim">
@@ -166,28 +165,28 @@
   <section class="modes">
     <div class="modes-wrap">
       <header class="modes-header">
-        <h1>Elige tu modo de juego</h1>
-        <p>Arma rompecabezas a tu manera o juega con imágenes predeterminadas.</p>
+        <h1>Choose your game mode</h1>
+        <p>Put together your way or play with default images.</p>
       </header>
 
       <div class="modes-grid">
         <!-- MODO PERSONALIZADO -->
         <article class="card">
-          <div class="mode-badge">Nuevo</div>
+          <div class="mode-badge">New</div>
           <div class="mode-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" width="64" height="64" fill="currentColor">
               <path d="M20 5h-2.6l-1.1-1.7A2 2 0 0 0 14.7 2h-5.4a2 2 0 0 0-1.6.9L6.6 5H4a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2Zm-8 13a5 5 0 1 1 0-10 5 5 0 0 1 0 10Zm0-2.2A2.8 2.8 0 1 0 9.2 13 2.8 2.8 0 0 0 12 15.8Z"/>
             </svg>
           </div>
-          <h3>Juego personalizado</h3>
-          <p>Usa tu cámara o sube una imagen. El sistema generará el rompecabezas para ti.</p>
+          <h3>Custom Game</h3>
+          <p>Use your camera or upload an image. The system will generate the puzzle for you</p>
 
           <div class="mode-actions">
-            <button id="btnEmpezar" type="button" class="btn main">Empezar</button>
-            <button id="btnSubirImagen" type="button" class="btn ghost">Subir imagen</button>
+            <button id="btnEmpezar" type="button" class="btn main">Get started</button>
+            <button id="btnSubirImagen" type="button" class="btn ghost">Upload image</button>
             <input id="fileInput" type="file" accept="image/*" capture="environment" hidden />
           </div>
-          <small class="hint">Tip: puedes usar la cámara del dispositivo.</small>
+          <small class="hint">Tip: You can use your device's camera.</small>
         </article>
 
         <!-- MODO CLÁSICO -->
@@ -197,13 +196,13 @@
               <path d="M10 2H4a2 2 0 0 0-2 2v6h3a2 2 0 1 1 0 4H2v6a2 2 0 0 0 2 2h6v-3a2 2 0 1 1 4 0v3h6a2 2 0 0 0 2-2v-6h-3a2 2 0 1 1 0-4h3V4a2 2 0 0 0-2-2h-6v3a2 2 0 1 1-4 0Z"/>
             </svg>
           </div>
-          <h3>Juego clásico</h3>
-          <p>Selecciona el nivel de dificultad y juega con imágenes predeterminadas.</p>
+          <h3>Classic game</h3>
+          <p>Select the difficulty level and play with default images.</p>
 
           <div class="mode-actions">
-            <a href="/juego/clasico" class="btn main">Elegir nivel</a>
+            <a href="/juego/clasico" class="btn main">Choose level</a>
           </div>
-          <small class="hint">Imágenes por defecto y niveles de 3×3 a 8×8.</small>
+          <small class="hint">Default images and levels of 3x3 - 8x8</small>
         </article>
       </div>
     </div>
@@ -214,15 +213,15 @@
     <div class="cam-box">
       <header class="cam-head">
         <h3>Tomar foto</h3>
-        <button class="cam-close" id="camClose" aria-label="Cerrar">✕</button>
+        <button class="cam-close" id="camClose" aria-label="Close">✕</button>
       </header>
       <div class="cam-body">
         <video id="camVideo" autoplay playsinline></video>
         <canvas id="camCanvas" hidden></canvas>
       </div>
       <div class="cam-actions">
-        <button class="btn ghost" id="camFlip" type="button" title="Cambiar cámara">Cambiar</button>
-        <button class="btn main" id="camShot" type="button">Tomar foto</button>
+        <button class="btn ghost" id="camFlip" type="button" title="Change camera">Cambiar</button>
+        <button class="btn main" id="camShot" type="button">Take a photo</button>
       </div>
     </div>
   </div>
@@ -349,7 +348,7 @@
   </script>
 
   <footer>
-    © 2025 EcoWheater | Designed with 💙 for el planeta
+    © 2025 EcoWheater | Designed with 💙 for the planet
   </footer>
 </body>
 </html>

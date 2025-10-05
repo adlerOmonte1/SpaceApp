@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // --- ELEMENTOS DEL DOM ---
+    // --- DOM ELEMENTS ---
     const map = L.map('map').setView([-9.9, -76.2], 5);
     const latInput = document.getElementById('manual-lat');
     const lonInput = document.getElementById('manual-lon');
@@ -8,19 +8,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const getManualBtn = document.getElementById('get-manual-btn');
     const resultsDiv = document.getElementById('results');
     
-    // --- Elementos para la Búsqueda ---
+    // --- Search Elements ---
     const searchInput = document.getElementById('search-input');
     const searchBtn = document.getElementById('search-btn');
 
     let dailyChart = null; 
 
-    // --- INICIALIZACIÓN DE MAPA ---
+    // --- MAP INITIALIZATION ---
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
     let marker = null;
 
-    // --- FUNCIONES ---
+    // --- FUNCTIONS ---
     function renderDailyChart(chartData) {
         if (dailyChart) { dailyChart.destroy(); }
         const canvas = document.getElementById('daily-chart-canvas');
@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 datasets: [
                     {
                         type: 'line',
-                        label: 'Temperatura (°C)',
+                        label: 'Temperature (°C)',
                         data: chartData.temperatures,
                         borderColor: '#e74c3c',
                         yAxisID: 'y_temp_hum',
@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     },
                     {
                         type: 'line',
-                        label: 'Punto de Rocío (°C)',
+                        label: 'Dew Point (°C)',
                         data: chartData.humidities,
                         borderColor: '#3498db',
                         yAxisID: 'y_temp_hum',
@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     },
                     {
                         type: 'bar',
-                        label: 'Precipitación (mm)',
+                        label: 'Precipitation (mm)',
                         data: chartData.precipitations,
                         backgroundColor: 'rgba(46, 204, 113, 0.5)',
                         yAxisID: 'y_precip',
@@ -60,11 +60,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    title: { display: true, text: 'Pronóstico Climático para el Día Completo' },
+                    title: { display: true, text: 'Full Day Weather Forecast' },
                     tooltip: { mode: 'index', intersect: false }
                 },
                 scales: {
-                    x: { title: { display: true, text: 'Hora del Día'} },
+                    x: { title: { display: true, text: 'Hour of the Day'} },
                     y_temp_hum: { type: 'linear', position: 'left', title: { display: true, text: '°C'} },
                     y_precip: { type: 'linear', position: 'right', title: { display: true, text: 'mm'}, grid: { drawOnChartArea: false }, beginAtZero: true }
                 }
@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function fetchData(lat, lon, date, time) {
-        resultsDiv.innerHTML = `<p class="loading">Consultando datos...</p>`;
+        resultsDiv.innerHTML = `<p class="loading">Fetching data...</p>`;
         resultsDiv.style.display = 'block';
         try {
             const mainResponse = await fetch('/api/get_climate_data', {
@@ -81,14 +81,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ latitude: lat, longitude: lon, date, time }),
             });
-            if (!mainResponse.ok) throw new Error('No se pudo obtener la descripción.');
+            if (!mainResponse.ok) throw new Error('Could not retrieve description.');
             const mainData = await mainResponse.json();
             
             if (marker) map.removeLayer(marker);
             map.setView([lat, lon], 12);
-            marker = L.marker([lat, lon]).addTo(map).bindPopup(`<b>${mainData.departamento || 'Ubicación'}</b>`).openPopup();
+            marker = L.marker([lat, lon]).addTo(map).bindPopup(`<b>${mainData.departamento || 'Location'}</b>`).openPopup();
             resultsDiv.innerHTML = `
-                <h3>Resultados para ${mainData.departamento || 'la ubicación seleccionada'}</h3>
+                <h3>Results for ${mainData.departamento || 'the selected location'}</h3>
                 <p class="result-description">${mainData.descripcion.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}</p>
                 <div class="chart-container"><canvas id="daily-chart-canvas"></canvas></div>
             `;
@@ -98,22 +98,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ latitude: lat, longitude: lon, date }),
             });
-            if (!chartResponse.ok) throw new Error('No se pudo obtener los datos del gráfico.');
+            if (!chartResponse.ok) throw new Error('Could not fetch chart data.');
             const chartData = await chartResponse.json();
             renderDailyChart(chartData);
         } catch (error) {
-            console.error("Error en fetchData:", error);
-            resultsDiv.innerHTML = `<p class="error-message">Error al conectar con el servidor.</p>`;
+            console.error("Error in fetchData:", error);
+            resultsDiv.innerHTML = `<p class="error-message">Error connecting to the server.</p>`;
         }
     }
     
-    // --- EVENTOS ---
+    // --- EVENTS ---
     getManualBtn.addEventListener('click', () => {
         const lat = parseFloat(latInput.value);
         const lon = parseFloat(lonInput.value);
         const date = dateInput.value;
         const time = timeInput.value;
-        if (isNaN(lat) || isNaN(lon) || !date || !time) { return alert('Por favor, ingresa datos válidos.'); }
+        if (isNaN(lat) || isNaN(lon) || !date || !time) { return alert('Please enter valid data.'); }
         fetchData(lat, lon, date, time);
     });
     
@@ -124,14 +124,14 @@ document.addEventListener('DOMContentLoaded', () => {
         marker = L.marker(e.latlng).addTo(map);
     });
 
-    // --- LÓGICA PARA EL BUSCADOR ---
+    // --- SEARCH LOGIC ---
     async function handleSearch() {
         const placeName = searchInput.value.trim();
         if (placeName === '') {
-            return alert('Por favor, ingresa un nombre de lugar para buscar.');
+            return alert('Please enter a place name to search.');
         }
 
-        searchBtn.textContent = 'Buscando...';
+        searchBtn.textContent = 'Searching...';
         searchBtn.disabled = true;
 
         try {
@@ -143,16 +143,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (!response.ok) {
                 const errorData = await response.json();
-                throw new Error(errorData.error || 'Lugar no encontrado.');
+                throw new Error(errorData.error || 'Place not found.');
             }
 
             const data = await response.json();
             
-            // Actualizar los campos de latitud y longitud
+            // Update latitude and longitude fields
             latInput.value = data.latitude.toFixed(5);
             lonInput.value = data.longitude.toFixed(5);
 
-            // Actualizar el mapa
+            // Update the map
             if (marker) map.removeLayer(marker);
             map.setView([data.latitude, data.longitude], 13);
             marker = L.marker([data.latitude, data.longitude]).addTo(map)
@@ -162,7 +162,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             alert(error.message);
         } finally {
-            searchBtn.textContent = 'Buscar';
+            searchBtn.textContent = 'Search';
             searchBtn.disabled = false;
         }
     }
@@ -174,7 +174,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Poner la fecha de hoy por defecto
+    // Set today’s date by default
     dateInput.value = new Date().toISOString().split('T')[0];
 });
-

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EcoWheater - Educación Climatológica</title>
+  <title>EcoWheater - Climate Education</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap');
 
@@ -15,7 +15,7 @@
       overflow-x:hidden; 
       min-height:100vh; 
       position:relative;
-      padding-top:100px; /* Evita que la navbar tape contenido */
+      padding-top:100px;
     }
 
     /* NAVBAR */
@@ -37,7 +37,7 @@
     nav a.logout { color:#ff6b6b; font-weight:600; }
     nav a.logout:hover { color:#ff3b3b; text-shadow:0 0 8px #ff3b3b; }
 
-    /* NUBES REALISTAS */
+    /* CLOUDS */
     .nube-real {
       position: absolute;
       animation: moverNube linear infinite;
@@ -70,7 +70,7 @@
       100% { transform: translateX(120vw); }
     }
 
-    /* LLUVIA */
+    /* RAIN */
     .lluvia { position:absolute; width:2px; height:15px; background:rgba(173,216,230,0.7); animation:caerLluvia linear infinite; }
     @keyframes caerLluvia { 0%{transform:translateY(-20px); opacity:0;} 50%{opacity:1;} 100%{transform:translateY(100vh); opacity:0;} }
 
@@ -82,7 +82,7 @@
     .hero-text h1{ font-size:2.5em; letter-spacing:2px; background:linear-gradient(90deg,#89c4ff,#ffffff); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:15px; }
     .hero-text p{ font-size:1em; color:#c9d8ff; line-height:1.6; }
 
-    /* TARJETAS FLIP */
+    /* FLIP CARDS */
     .cards-container {
       display:grid;
       grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
@@ -135,12 +135,11 @@
       position: relative;
       z-index:1;
     }
-
   </style>
 </head>
 <body>
 
-  <!-- NUBES REALISTAS -->
+  <!-- CLOUDS -->
   <div class="nube-real nube1">
     <div class="c1"></div>
     <div class="c2"></div>
@@ -159,10 +158,10 @@
     <div class="c3"></div>
   </div>
 
-  <!-- LLUVIA -->
+  <!-- RAIN -->
   <script>
-    const numGotas = 80;
-    for(let i=0;i<numGotas;i++){
+    const numDrops = 80;
+    for(let i=0;i<numDrops;i++){
       let drop = document.createElement('div');
       drop.className = 'lluvia';
       drop.style.left = Math.random()*100 + 'vw';
@@ -174,165 +173,155 @@
 
   <!-- NAVBAR -->
  <nav>
-  <a href="/inicio">Inicio</a>
-    <a href="{{ url_for('pronostico') }}">Pronóstico</a>
-    <a href="#">Agenda</a>
-    <a href="{{ url_for('comparar') }}">Comparar Lugares</a>
-    <a href="{{ url_for('educacion') }}">Educacion</a>
-    <a href="/juego">Minijuegos</a> 
+    <a href="/inicio">Home</a>
+    <a href="{{ url_for('pronostico') }}">Forecast</a>
+    <a href="#">Schedule</a>
+    <a href="{{ url_for('comparar') }}">Compare Locations</a>
+    <a href="{{ url_for('educacion') }}">Education</a>
+    <a href="/juego">Mini Games</a> 
     <a href="{{ url_for('iniciosesion') }}">Login</a>
-    <a href="{{ url_for('perfil') }}">Mi Perfil</a>
-    <a href="{{ url_for('logout') }}" style="color:#ff6b6b;">Cerrar Sesión</a>
+    <a href="{{ url_for('perfil') }}">My Profile</a>
+    <a href="{{ url_for('logout') }}" style="color:#ff6b6b;">Log Out</a>
 </nav>
 
   <!-- HERO -->
   <section class="hero">
-    <img src="{{ url_for('static', filename='earth.png') }}" alt="Tierra flotante">
+    <img src="{{ url_for('static', filename='earth.png') }}" alt="Floating Earth">
     <div class="hero-text">
-      <h1>🌎 Aprende sobre Clima y Medio Ambiente</h1>
-      <p>Explora fenómenos extremos, cambio climático, energías renovables y ciencia del clima de manera visual y entretenida.</p>
+      <h1>🌎 Learn About Weather and the Environment</h1>
+      <p>Explore extreme phenomena, climate change, renewable energy, and atmospheric science in a visual and entertaining way.</p>
     </div>
   </section>
 
-  <!-- TARJETAS EDUCATIVAS FLIP -->
+  <!-- EDUCATIONAL FLIP CARDS -->
   <section class="cards-container">
-    <!-- Tarjeta 1 -->
     <div class="card">
       <div class="card-front">
-        <img src="{{ url_for('static', filename='tormenta.png') }}" alt="Tormenta">
-        <h3>Fenómenos Extremos</h3>
-        <p>Huracanes, tornados y olas de calor.</p>
+        <img src="{{ url_for('static', filename='tormenta.png') }}" alt="Storm">
+        <h3>Extreme Phenomena</h3>
+        <p>Hurricanes, tornadoes, and heat waves.</p>
       </div>
       <div class="card-back">
-        <h3>Fenómenos Extremos</h3>
-        <p>Huracanes, tornados y olas de calor son eventos meteorológicos intensos que pueden afectar gravemente la vida humana, la agricultura y los ecosistemas. </p>
+        <h3>Extreme Phenomena</h3>
+        <p>Hurricanes, tornadoes, and heat waves are intense weather events that can severely impact human life, agriculture, and ecosystems.</p>
         <br>
-        <p>Su estudio ayuda a generar sistemas de alerta temprana y planes de mitigación efectivos.</p>
+        <p>Studying them helps create early warning systems and effective mitigation plans.</p>
       </div>
     </div>
 
-    <!-- Tarjeta 2 -->
     <div class="card">
       <div class="card-front">
-        <img src="{{ url_for('static', filename='cambio_climatico.png') }}" alt="Cambio Climático">
-        <h3>Cambio Climático</h3>
-        <p>El planeta se calienta cada vez más.</p>
+        <img src="{{ url_for('static', filename='cambio_climatico.png') }}" alt="Climate Change">
+        <h3>Climate Change</h3>
+        <p>The planet is getting warmer.</p>
       </div>
       <div class="card-back">
-        <h3>Cambio Climático</h3>
-        <p>El cambio climático es causado principalmente por emisiones de gases de efecto invernadero. </p>
+        <h3>Climate Change</h3>
+        <p>Climate change is mainly caused by greenhouse gas emissions.</p>
         <br>
-        <p>Sus consecuencias incluyen aumento del nivel del mar, eventos climáticos extremos y pérdida de biodiversidad. La mitigación requiere acciones globales y locales.</p>
+        <p>Its consequences include rising sea levels, extreme weather events, and loss of biodiversity. Mitigation requires both global and local actions.</p>
       </div>
     </div>
 
-    <!-- Tarjeta 3 -->
     <div class="card">
       <div class="card-front">
-        <img src="{{ url_for('static', filename='energia_renovable.png') }}" alt="Energía Renovable">
-        <h3>Energías Renovables</h3>
-        <p>Solar, eólica e hidroeléctrica.</p>
+        <img src="{{ url_for('static', filename='energia_renovable.png') }}" alt="Renewable Energy">
+        <h3>Renewable Energy</h3>
+        <p>Solar, wind, and hydroelectric.</p>
       </div>
       <div class="card-back">
-        <h3>Energías Renovables</h3>
-        <p>Estas energías provienen de fuentes naturales y ayudan a reducir la contaminación. </p>
+        <h3>Renewable Energy</h3>
+        <p>These energies come from natural sources and help reduce pollution.</p>
         <br>
-        <p>Su adopción masiva es clave para combatir el cambio climático y promover un desarrollo sostenible.</p>
+        <p>Massive adoption is key to fighting climate change and promoting sustainable development.</p>
       </div>
     </div>
 
-    <!-- Tarjeta 4 -->
     <div class="card">
       <div class="card-front">
-        <img src="{{ url_for('static', filename='viento.png') }}" alt="Viento">
-        <h3>Dinámica del Viento</h3>
-        <p>El aire en movimiento transporta calor y humedad.</p>
+        <img src="{{ url_for('static', filename='viento.png') }}" alt="Wind">
+        <h3>Wind Dynamics</h3>
+        <p>Moving air transports heat and moisture.</p>
       </div>
       <div class="card-back">
-        <h3>Dinámica del Viento</h3>
-        <p>El viento se genera por diferencias de presión y temperatura. </p>
+        <h3>Wind Dynamics</h3>
+        <p>Wind is generated by differences in pressure and temperature.</p>
         <br>
-        <p>Influye en el clima, la formación de nubes y la dispersión de contaminantes. Es fundamental para energías renovables como la eólica.</p>
-    </div>
-    </div>
-
-    <!-- Tarjeta 5 -->
-    <div class="card">
-      <div class="card-front">
-        <img src="{{ url_for('static', filename='experimentos.png') }}" alt="Experimentos">
-        <h3>Experimentos Caseros</h3>
-        <p>Aprende observando.</p>
-      </div>
-      <div class="card-back">
-        <h3>Experimentos Caseros</h3>
-        <p>Experimentos sencillos como crear nubes en frascos, medir la lluvia o la evaporación permiten entender mejor el ciclo del agua y los fenómenos climáticos de manera práctica.</p>
+        <p>It influences climate, cloud formation, and pollutant dispersion. It’s essential for renewable energy like wind power.</p>
       </div>
     </div>
 
-    <!-- Tarjeta 6 -->
     <div class="card">
       <div class="card-front">
-        <img src="{{ url_for('static', filename='pronostico.png') }}" alt="Pronósticos">
-        <h3>Pronósticos del Clima</h3>
-        <p>Interpretar temperatura, lluvia y viento.</p>
+        <img src="{{ url_for('static', filename='experimentos.png') }}" alt="Experiments">
+        <h3>Home Experiments</h3>
+        <p>Learn by observing.</p>
       </div>
       <div class="card-back">
-        <h3>Pronósticos del Clima</h3>
-        <p>Usan satélites, radares y modelos matemáticos para anticipar lluvias, tormentas y cambios de temperatura. </p>
+        <h3>Home Experiments</h3>
+        <p>Simple experiments like creating clouds in jars, measuring rainfall, or evaporation help better understand the water cycle and climate phenomena practically.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-front">
+        <img src="{{ url_for('static', filename='pronostico.png') }}" alt="Forecast">
+        <h3>Weather Forecasts</h3>
+        <p>Interpreting temperature, rain, and wind.</p>
+      </div>
+      <div class="card-back">
+        <h3>Weather Forecasts</h3>
+        <p>They use satellites, radars, and mathematical models to predict rain, storms, and temperature changes.</p>
         <br>
-        <p>Son esenciales para la agricultura, la aviación y la gestión de emergencias.</p>
+        <p>They are essential for agriculture, aviation, and emergency management.</p>
       </div>
     </div>
 
-    <!-- Tarjeta 7 -->
     <div class="card">
       <div class="card-front">
-        <img src="{{ url_for('static', filename='sol.png') }}" alt="Radiación Solar">
-        <h3>Radiación Solar</h3>
-        <p>Energía que calienta la Tierra.</p>
+        <img src="{{ url_for('static', filename='sol.png') }}" alt="Solar Radiation">
+        <h3>Solar Radiation</h3>
+        <p>Energy that warms the Earth.</p>
       </div>
       <div class="card-back">
-        <h3>Radiación Solar</h3>
-        <p>La radiación solar es fundamental para la vida y el clima. Afecta la temperatura, evapotranspiración y el desarrollo de los ecosistemas. </p>
+        <h3>Solar Radiation</h3>
+        <p>Solar radiation is fundamental for life and weather. It affects temperature, evapotranspiration, and ecosystem development.</p>
         <br>
-        <p>Su estudio es clave para energías renovables y entender patrones climáticos.</p>
+        <p>Studying it is key for renewable energy and understanding climate patterns.</p>
       </div>
     </div>
 
-    <!-- Tarjeta 8 -->
     <div class="card">
       <div class="card-front">
-        <img src="{{ url_for('static', filename='humedad.png') }}" alt="Humedad">
-        <h3>Humedad Atmosférica</h3>
-        <p>Cantidad de vapor de agua en el aire.</p>
+        <img src="{{ url_for('static', filename='humedad.png') }}" alt="Humidity">
+        <h3>Atmospheric Humidity</h3>
+        <p>Amount of water vapor in the air.</p>
       </div>
       <div class="card-back">
-        <h3>Humedad Atmosférica</h3>
-        <p>La humedad determina la sensación térmica, influencia las precipitaciones y afecta la agricultura.</p>
+        <h3>Atmospheric Humidity</h3>
+        <p>Humidity determines thermal sensation, influences precipitation, and affects agriculture.</p>
         <br>
-        <p> Comprenderla es clave para pronósticos y control de climas interiores y exteriores.</p>
+        <p>Understanding it is crucial for weather forecasts and climate control indoors and outdoors.</p>
       </div>
     </div>
 
-    <!-- Tarjeta 9 -->
     <div class="card">
       <div class="card-front">
-        <img src="{{ url_for('static', filename='nieve.png') }}" alt="Nieve">
-        <h3>Formación de Nieve</h3>
-        <p>Cuando el agua se congela en la atmósfera.</p>
+        <img src="{{ url_for('static', filename='nieve.png') }}" alt="Snow">
+        <h3>Snow Formation</h3>
+        <p>When water freezes in the atmosphere.</p>
       </div>
       <div class="card-back">
-        <h3>Formación de Nieve</h3>
-        <p>La nieve se forma cuando la humedad se congela en capas de la atmósfera. </p>
+        <h3>Snow Formation</h3>
+        <p>Snow forms when moisture freezes in atmospheric layers.</p>
         <br>
-        <p>Es importante para los ciclos hidrológicos, el clima local y el abastecimiento de agua en regiones montañosas.</p>
+        <p>It’s important for hydrological cycles, local climate, and water supply in mountain regions.</p>
       </div>
     </div>
-
   </section>
 
   <footer>
-    © 2025 EcoWheater | Diseñado con 💙 para universitarios curiosos
+    © 2025 EcoWheater | Designed with 💙 for curious university students
   </footer>
 
 </body>

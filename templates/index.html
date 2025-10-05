@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ECOWHEATER - Predicción Meteorológica</title>
+    <title>ECOWHEATER - Weather Forecast</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* ========================================================== */
-        /* BASE & BACKGROUND (Fondo de bienvenida) */
+        /* BASE & BACKGROUND (Welcome background) */
         /* ========================================================== */
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap');
 
@@ -24,7 +24,7 @@
             font-family: 'Outfit', sans-serif;
             color: #eaf2ff;
             overflow-x: hidden;
-            overflow-y: hidden; /* Ocultamos el scroll vertical mientras está el splash screen */
+            overflow-y: hidden; /* Hide vertical scroll while splash screen is active */
         }
         
         body.initial-bg {
@@ -42,14 +42,13 @@
 
 
         /* ========================================================== */
-        /* SPLASH SCREEN (El overlay del cohete) */
+        /* SPLASH SCREEN (Rocket overlay) */
         /* ========================================================== */
         .overlay {
             position: fixed; top: 0; left: 0; z-index: 200; 
             background: linear-gradient(135deg, rgba(0, 10, 30, 0.9) 0%, rgba(0, 30, 60, 0.7) 100%);
             height: 100vh; width: 100vw; display: flex; flex-direction: column;
             align-items: center; justify-content: center; gap: 2rem; padding: 2rem;
-            /* CLAVE: Reducimos el tiempo de transición de opacidad a 0.4s */
             transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out;
         }
         
@@ -64,12 +63,12 @@
             align-items: center;
         }
         
-        /* ESTILO COHETE */
+        /* ROCKET STYLE */
         .rocket-icon {
             transform: rotate(-45deg); 
         }
         
-        /* LLAMA CSS */
+        /* FLAME CSS */
         .flame {
             position: absolute;
             bottom: -5px; 
@@ -82,7 +81,7 @@
             z-index: -1; 
         }
 
-        /* --- ANIMACIÓN DE ASCENSO DEL COHETE --- */
+        /* --- ROCKET LAUNCH ANIMATION --- */
         .rocket-launch {
             animation: launch 1.5s forwards; 
         }
@@ -94,7 +93,7 @@
             100% { transform: translateY(-150vh) rotate(-45deg); opacity: 0; }
         }
         
-        /* CLAVE: La llama ahora depende de que el botón tenga 'launching' */
+        /* The flame depends on button having 'launching' class */
         .launching .flame {
             opacity: 1;
             animation: launch 1.5s forwards, flame 0.2s infinite alternate, flameFade 1.5s forwards; 
@@ -106,10 +105,10 @@
             100% { opacity: 0; transform: translateX(-50%) scaleX(0.5); } 
         }
 
-        /* Animación del texto: Reducida a 0.3s */
+        /* Text animation: reduced to 0.3s */
         .text-fade { animation: textFade 0.3s forwards; }
         
-        /* KEYFRAME DE DESAPARICIÓN RÁPIDA DEL BOTÓN */
+        /* QUICK BUTTON SHRINK ANIMATION */
         .button-shrink { animation: buttonShrink 0.3s forwards; }
         @keyframes buttonShrink {
             0% { transform: scale(1); opacity: 1; }
@@ -118,19 +117,19 @@
 
 
         /* ========================================================== */
-        /* CONTENIDO PRINCIPAL (La segunda página) */
+        /* MAIN CONTENT (After splash screen) */
         /* ========================================================== */
 
-        /* CLAVE: Reducimos el tiempo de transición de opacidad a 0.5s */
         #main-content { opacity: 0; transition: opacity 0.5s ease-in-out; min-height: 100vh; }
         #main-content.show { opacity: 1; }
         
-        /* --- ESTILOS COMPLEJOS --- */
+        /* --- NAVIGATION --- */
         nav { position: fixed; top: 0; left: 0; width: 100%; display: flex; justify-content: center; gap: 40px; padding: 18px 0; background: rgba(10, 15, 40, 0.35); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); z-index: 100; box-shadow: 0 0 20px rgba(102, 170, 255, 0.15); }
         nav a { color: #b8d0ff; text-decoration: none; font-weight: 400; transition: 0.3s; letter-spacing: 1px; font-size: 0.95em; position: relative; }
         nav a::after { content: ""; position: absolute; bottom: -5px; left: 0; width: 0%; height: 2px; background: #66aaff; transition: width 0.3s; }
         nav a:hover::after { width: 100%; }
         nav a:hover { color: #66aaff; text-shadow: 0 0 8px #66aaff; }
+
         .hero { display: flex; flex-direction: row; justify-content: center; align-items: center; height: 100vh; gap: 90px; text-align: left; padding: 0 5%; }
         .hero img { width: 430px; object-fit: contain; animation: float 6s ease-in-out infinite; filter: drop-shadow(0 0 35px rgba(102, 170, 255, 0.6)); }
         .hero-text { max-width: 520px; animation: fadeInUp 1.5s ease-out; }
@@ -138,6 +137,7 @@
         .hero-text p { font-size: 1.15em; color: #c9d8ff; line-height: 1.6; margin-bottom: 35px; }
         .hero-text button { display: block; width: fit-content; margin-bottom: 15px; background: linear-gradient(90deg, #003366, #0055aa); border: none; padding: 13px 32px; border-radius: 12px; color: #eaf2ff; font-size: 1em; font-weight: 500; letter-spacing: 0.5px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 0 10px rgba(102, 170, 255, 0.4); }
         .hero-text button:hover { transform: scale(1.05); box-shadow: 0 0 25px rgba(102, 170, 255, 0.6); background: linear-gradient(90deg, #004080, #0077ff); }
+
         .benefits { padding: 120px 8% 90px; text-align: center; background: radial-gradient(circle at top, #0d1c3b, #00010f 80%); }
         .benefits h2 { font-size: 2.4em; color: #89c4ff; margin-bottom: 60px; letter-spacing: 1px; }
         .card-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 40px; justify-content: center; max-width: 1200px; margin: 0 auto; }
@@ -147,14 +147,15 @@
         .card:hover { transform: translateY(-10px); box-shadow: 0 0 25px rgba(102, 170, 255, 0.3); }
         .card h3 { color: #a8cfff; font-size: 1.3em; margin-bottom: 15px; }
         .card p { color: #c8d6ff; font-size: 0.95em; line-height: 1.6; }
+
         footer { text-align: center; padding: 45px 0; color: #7a8cb3; font-size: 0.9em; border-top: 1px solid rgba(255, 255, 255, 0.05); background: #02040c; }
-        
-        /* --- ANIMACIONES ADICIONALES --- */
+
+        /* --- ADDITIONAL ANIMATIONS --- */
         #launchBtn { transition: all 0.5s ease-in-out; position: relative; overflow: visible; }
         @keyframes flame { 0% { height: 20px; background: linear-gradient(to top, #ff4500, #ff0000, #ff8c00); } 100% { height: 30px; background: linear-gradient(to top, #ffff00, #ff4500, #ff0000); } }
         @keyframes textFade { 0% { opacity: 1; } 100% { opacity: 0; } }
-        
-        /* ESTILOS DEL CONTENEDOR DE BIENVENIDA */
+
+        /* WELCOME CONTAINER STYLES */
         .welcome-container { 
             text-align: center; 
             animation: fadeIn 1.5s ease-out; 
@@ -177,13 +178,12 @@
             letter-spacing: 1px; 
         }
 
-        /* CLAVE: Corregimos el color del tagline */
         .tagline {
             color: #888888; 
-            opacity: 0.8; /* Lo hacemos ligeramente menos brillante que los títulos */
+            opacity: 0.8;
             font-size: 1.1rem;
             margin-top: 10px;
-             font-style: italic; 
+            font-style: italic; 
         }
         
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
@@ -200,8 +200,8 @@
     <div class="overlay" id="splashScreen">
         <div class="welcome-container">
             <h1 class="title">ECOWHEATER</h1>
-            <h2 class="subtitle">Predicción Meteorológica para Eventos al Aire Libre</h2>
-            <p class="tagline">Planifica con confianza, disfruta sin sorpresas</p>
+            <h2 class="subtitle">Weather Forecast for Outdoor Events</h2>
+            <p class="tagline">Plan with confidence, enjoy without surprises</p>
         </div>
         <button
             class="bg-white/90 text-black font-bold py-4 px-8 rounded-full flex items-center space-x-3 text-2xl hover:bg-white transition-all duration-300 backdrop-blur-sm relative pulse"
@@ -210,30 +210,30 @@
                 <span class="rocket-icon text-2xl">🚀</span>
                 <div class="flame"></div>
             </div>
-            <span class="launch-text">INICIAR EXPERIENCIA</span>
+            <span class="launch-text">START EXPERIENCE</span>
         </button>
     </div>
 
     <div id="main-content">
  <nav>
-    <a href="/inicio">Inicio</a>
-    <a href="{{ url_for('pronostico') }}">Pronóstico</a>
-    <a href="#">Agenda</a>
-    <a href="{{ url_for('comparar') }}">Comparar Lugares</a>
-    <a href="{{ url_for('educacion') }}">Educacion</a>
-    <a href="/juego">Minijuegos</a> 
+    <a href="/inicio">Home</a>
+    <a href="{{ url_for('pronostico') }}">Forecast</a>
+    <a href="#">Schedule</a>
+    <a href="{{ url_for('comparar') }}">Compare Places</a>
+    <a href="{{ url_for('educacion') }}">Education</a>
+    <a href="/juego">Mini Games</a> 
     <a href="{{ url_for('iniciosesion') }}">Login</a>
-    <a href="{{ url_for('perfil') }}">Mi Perfil</a>
-    <a href="{{ url_for('logout') }}" style="color:#ff6b6b;">Cerrar Sesión</a>
+    <a href="{{ url_for('perfil') }}">My Profile</a>
+    <a href="{{ url_for('logout') }}" style="color:#ff6b6b;">Log Out</a>
 </nav>
 
         <section class="hero">
             <img src="{{ url_for('static', filename='earth.png') }}" alt="Earth Transparent">
             <div class="hero-text">
                 <h1>ECOWHEATER</h1>
-                <p>Consult, learn and understand the weather intelligently.</p>
+                <p>Consult, learn, and understand the weather intelligently.</p>
                 <button onclick="location.href='/pronostico'">See the weather now</button>
-                <button onclick="location.href='/educacion'">Explore educational section</button>
+                <button onclick="location.href='/educacion'">Explore the educational section</button>
             </div>
         </section>
 
@@ -249,7 +249,7 @@
                     <p>Learn about atmospheric phenomena and meteorological concepts in a fun way.</p>
                 </div>
                 <div class="card">
-                    <h3>Personal Agenda</h3>
+                    <h3>Personal Schedule</h3>
                     <p>Plan your daily activities according to upcoming weather conditions.</p>
                 </div>
                 <div class="card">
@@ -283,38 +283,30 @@
             const text = document.querySelector('.launch-text');
             const welcomeContainer = document.querySelector('.welcome-container');
 
-            // Duración de la animación del cohete: 1.5s (1500ms)
+            // Rocket animation duration: 1.5s (1500ms)
             const totalAnimationTime = 1000; 
 
-            // 1. Iniciar animaciones de pre-lanzamiento
+            // 1. Start pre-launch animations
             button.disabled = true;
             button.style.pointerEvents = 'none';
-            // Ocultar texto y activar el encogimiento del botón (button-shrink)
             button.classList.add('button-shrink', 'launching'); 
             button.classList.remove('pulse');
 
             text.classList.add('text-fade');
             welcomeContainer.style.opacity = '0';
 
-            // 2. Iniciar animación del cohete (ascenso)
+            // 2. Rocket ascent animation
             rocket.classList.add('rocket-launch');
             
-            // 3. Iniciar la transición exactamente cuando termina el ascenso (1500ms)
+            // 3. Transition when rocket finishes ascent (1500ms)
             setTimeout(() => {
-                // A) Cambiar el fondo del body
                 body.classList.remove('initial-bg');
                 body.classList.add('final-bg');
                 body.style.overflowY = 'auto';
-
-                // B) Mostrar el contenido principal (fade-in en 0.5s)
                 mainContent.classList.add('show');
-
-                // C) Ocultar el splash screen (Inicia el fade-out de 0.4s)
                 splashScreen.classList.add("hidden-screen");
 
-                // D) Limpieza: Remover el elemento
                 splashScreen.addEventListener('transitionend', function handler(e) {
-                    // Solo ejecutar si la transición que finalizó es la de 'opacity'
                     if (e.propertyName === 'opacity') { 
                         splashScreen.removeEventListener('transitionend', handler);
                         splashScreen.remove(); 
@@ -323,7 +315,7 @@
             }, totalAnimationTime); 
         });
 
-        console.log("Script de lanzamiento y carga de página principal final cargado correctamente");
+        console.log("Launch and main page script successfully loaded");
     </script>
 </body>
 

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rompecabezas – Clásico</title>
+<title>Puzzle – Classic</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
@@ -30,7 +30,7 @@
   nav a:hover::after{ width:100%; }
   nav a:hover{ color:#66aaff; text-shadow:0 0 8px #66aaff; }
 
-  .wrap{max-width:1200px;margin:0 auto;padding:130px 6% 40px} /* +espacio por nav fijo */
+  .wrap{max-width:1200px;margin:0 auto;padding:130px 6% 40px}
   .hd{text-align:center;margin-bottom:18px}
   .hd h1{color:#89c4ff;text-shadow:0 0 10px rgba(102,170,255,.25)}
   .top{display:flex;gap:12px;justify-content:space-between;align-items:center;margin-bottom:12px}
@@ -47,60 +47,59 @@
   .thumb img{width:100%;display:block;border-radius:12px;border:1px solid rgba(255,255,255,.1)}
   .win{position:absolute;inset:0;display:none;place-items:center;background:rgba(2,4,12,.55);backdrop-filter:blur(4px)}
   .win .box{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:20px;padding:20px;text-align:center;box-shadow:0 0 24px rgba(102,170,255,.35)}
-   footer{text-align:center;padding:45px 0;color:#7a8cb3;font-size:.9em;border-top:1px solid rgba(255,255,255,.05);background:#02040c}
+  footer{text-align:center;padding:45px 0;color:#7a8cb3;font-size:.9em;border-top:1px solid rgba(255,255,255,.05);background:#02040c}
 </style>
 </head>
 <body>
 
 <!-- NAVBAR -->
 <nav>
-  <a href="/inicio">Inicio</a>
-    <a href="/pronostico">Pronóstico</a>
-    <a href="#">Agenda</a>
-    <a href="/comparar">Comparar Lugares</a>
-    <a href="/educacion">Educación</a>
-    <a href="/juego">Minijuegos</a>
-    <a href="/login">Login</a>
-    <a href="/perfil">Mi Perfil</a>
-    <a href="/logout" style="color:#ff6b6b;">Cerrar Sesión</a>
+  <a href="/inicio">Home</a>
+  <a href="/pronostico">Forecast</a>
+  <a href="#">Schedule</a>
+  <a href="/comparar">Compare Locations</a>
+  <a href="/educacion">Education</a>
+  <a href="/juego">Mini Games</a>
+  <a href="/login">Login</a>
+  <a href="/perfil">My Profile</a>
+  <a href="/logout" style="color:#ff6b6b;">Log Out</a>
 </nav>
 
 <div class="wrap">
   <header class="hd">
-    <h1>Rompecabezas – Clásico</h1>
-    <p>Arrastra las piezas para formar la imagen.</p>
+    <h1>Puzzle – Classic</h1>
+    <p>Drag the pieces to form the image.</p>
   </header>
 
   <div class="top">
     <div style="display:flex;gap:10px;flex-wrap:wrap">
       <span class="badge" id="dimBadge">0×0</span>
-      <span class="badge">Movs: <b id="moves">0</b></span>
-      <span class="badge">Tiempo: <b id="time">00:00</b></span>
+      <span class="badge">Moves: <b id="moves">0</b></span>
+      <span class="badge">Time: <b id="time">00:00</b></span>
     </div>
     <div style="display:flex;gap:10px;flex-wrap:wrap">
-
-      <button class="btn" id="btnReiniciar">Reiniciar</button>
-      <a class="btn main" href="/juego/clasico">← Volver</a>
+      <button class="btn" id="btnReiniciar">Restart</button>
+      <a class="btn main" href="/juego/clasico">← Back</a>
     </div>
   </div>
 
   <div class="board-wrap">
     <div class="board" id="board"></div>
     <aside class="side">
-      <h3>Vista previa</h3>
-      <div class="thumb"><img id="thumb" alt="Vista previa"></div>
-      <p style="color:#7a8cb3;margin-top:8px">Sugerencia: agranda la ventana si quieres piezas más grandes.</p>
+      <h3>Preview</h3>
+      <div class="thumb"><img id="thumb" alt="Preview"></div>
+      <p style="color:#7a8cb3;margin-top:8px">Tip: make the window larger if you want bigger pieces.</p>
     </aside>
   </div>
 </div>
 
 <div class="win" id="win">
   <div class="box">
-    <h2 style="color:#89c4ff">¡Completado! 🎉</h2>
-    <p>Tiempo: <b id="wTime">00:00</b> · Movs: <b id="wMoves">0</b></p>
+    <h2 style="color:#89c4ff">Completed! 🎉</h2>
+    <p>Time: <b id="wTime">00:00</b> · Moves: <b id="wMoves">0</b></p>
     <div style="margin-top:12px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
-      <button class="btn" id="btnAgain">Jugar de nuevo</button>
-      <a class="btn main" href="./clasico.html">Volver a la galería</a>
+      <button class="btn" id="btnAgain">Play Again</button>
+      <a class="btn main" href="/juego/clasico">Back to Gallery</a>
     </div>
   </div>
 </div>
@@ -118,14 +117,14 @@ function bestFactorPair(n){
   return {rows:bestR, cols:bestC};
 }
 
-/* ===== entradas (hash o session) ===== */
+/* ===== inputs (hash or session) ===== */
 const imgSrc = getHashParam('img') || sessionStorage.getItem('rompecabezas_imagen');
 const nPieces = Number(getHashParam('n') || sessionStorage.getItem('rompecabezas_piezas') || 16);
-if(!imgSrc){ alert('No hay imagen seleccionada.'); location.href='./clasico.html'; }
+if(!imgSrc){ alert('No image selected.'); location.href='./clasico.html'; }
 
 $('#thumb').src = imgSrc;
 
-/* ===== tablero ===== */
+/* ===== board ===== */
 const board = $('#board'), movesEl = $('#moves'), timeEl = $('#time'), dimBadge = $('#dimBadge');
 let rows, cols, tiles, order=[], solved=[], moves=0, seconds=0, timer=null;
 
@@ -179,7 +178,7 @@ function checkWin(){
   }
 }
 
-/* ===== controles ===== */
+/* ===== controls ===== */
 
 $('#btnReiniciar').addEventListener('click', ()=>{ moves=0; movesEl.textContent='0'; startTimer(); order = shuffle([...solved]); render(); });
 $('#btnAgain').addEventListener('click', ()=>{ $('#win').style.display='none'; $('#btnReiniciar').click(); });
@@ -188,7 +187,7 @@ $('#btnAgain').addEventListener('click', ()=>{ $('#win').style.display='none'; $
 createBoard();
 </script>
   <footer>
-    © 2025 EcoWheater | Designed with 💙 for el planeta
+    © 2025 EcoWheater | Designed with 💙 for the planet
   </footer>
 
 </body>
