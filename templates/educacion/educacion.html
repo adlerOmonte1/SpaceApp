@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EcoWheater - Educación Climatológica</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap');
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { 
+      font-family:'Outfit',sans-serif; 
+      background: radial-gradient(circle at 25% 25%, #0a1930,#00010f 80%); 
+      color:#eaf2ff; 
+      overflow-x:hidden; 
+      min-height:100vh; 
+      position:relative;
+      padding-top:100px; /* Evita que la navbar tape contenido */
+    }
+
+    /* NAVBAR */
+    nav {
+      position: fixed; top:0; left:0; width:100%; display:flex; justify-content:center; gap:30px; 
+      padding:18px 0; 
+      background: rgba(10,15,40,0.35); 
+      backdrop-filter: blur(12px); 
+      border-bottom:1px solid rgba(255,255,255,0.05); 
+      z-index:100; 
+      box-shadow:0 0 20px rgba(102,170,255,0.15);
+    }
+    nav a { 
+      color:#b8d0ff; text-decoration:none; font-weight:400; transition:0.3s; letter-spacing:1px; font-size:0.95em; position:relative; 
+    }
+    nav a::after { content:""; position:absolute; bottom:-5px; left:0; width:0%; height:2px; background:#66aaff; transition:width 0.3s; }
+    nav a:hover::after { width:100%; }
+    nav a:hover { color:#66aaff; text-shadow:0 0 8px #66aaff; }
+    nav a.logout { color:#ff6b6b; font-weight:600; }
+    nav a.logout:hover { color:#ff3b3b; text-shadow:0 0 8px #ff3b3b; }
+
+    /* NUBES REALISTAS */
+    .nube-real {
+      position: absolute;
+      animation: moverNube linear infinite;
+      z-index: 0;
+    }
+    .nube-real div {
+      position: absolute;
+      background: rgba(255,255,255,0.25);
+      border-radius: 50%;
+      filter: blur(2px);
+    }
+
+    .nube1 { top: 60px; left: -250px; animation-duration: 60s; }
+    .nube1 .c1 { width: 60px; height: 60px; top: 0; left: 20px; }
+    .nube1 .c2 { width: 100px; height: 80px; top: -10px; left: 60px; }
+    .nube1 .c3 { width: 60px; height: 60px; top: 0; left: 120px; }
+
+    .nube2 { top: 140px; left: -300px; animation-duration: 90s; }
+    .nube2 .c1 { width: 50px; height: 50px; top: 10px; left: 10px; }
+    .nube2 .c2 { width: 120px; height: 70px; top: 0; left: 50px; }
+    .nube2 .c3 { width: 60px; height: 60px; top: 10px; left: 130px; }
+
+    .nube3 { top: 220px; left: -200px; animation-duration: 75s; }
+    .nube3 .c1 { width: 40px; height: 40px; top: 10px; left: 0; }
+    .nube3 .c2 { width: 100px; height: 60px; top: 0; left: 40px; }
+    .nube3 .c3 { width: 50px; height: 50px; top: 10px; left: 100px; }
+
+    @keyframes moverNube {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(120vw); }
+    }
+
+    /* LLUVIA */
+    .lluvia { position:absolute; width:2px; height:15px; background:rgba(173,216,230,0.7); animation:caerLluvia linear infinite; }
+    @keyframes caerLluvia { 0%{transform:translateY(-20px); opacity:0;} 50%{opacity:1;} 100%{transform:translateY(100vh); opacity:0;} }
+
+    /* HERO */
+    .hero { display:flex; justify-content:center; align-items:center; gap:50px; text-align:left; padding:50px 5px 50px; position:relative; z-index:1; }
+    .hero img { width:300px; animation: float 6s ease-in-out infinite; filter:drop-shadow(0 0 35px rgba(102,170,255,0.6)); }
+    @keyframes float { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-15px);} }
+    .hero-text { max-width:520px; }
+    .hero-text h1{ font-size:2.5em; letter-spacing:2px; background:linear-gradient(90deg,#89c4ff,#ffffff); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:15px; }
+    .hero-text p{ font-size:1em; color:#c9d8ff; line-height:1.6; }
+
+    /* TARJETAS FLIP */
+    .cards-container {
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+      gap:25px;
+      max-width:1200px;
+      margin:0 auto 60px;
+      padding:0 5%;
+      perspective: 1500px;
+      position: relative;
+      z-index:1;
+    }
+    .card {
+      width:100%;
+      height:380px;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.8s;
+    }
+    .card:hover { transform: rotateY(180deg); }
+    .card-front, .card-back {
+      position:absolute;
+      width:100%;
+      height:100%;
+      backface-visibility: hidden;
+      border-radius:30px;
+      padding:20px;
+      background: rgba(255,255,255,0.05);
+      border:1px solid rgba(255,255,255,0.1);
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:flex-start;
+      text-align:center;
+      overflow-y:auto;
+    }
+    .card-front img, .card-back img { width:290px; height:180px; margin-bottom:25px; margin-top:30px; border-radius:30px; }
+    .card-front h3 { color:#a8cfff; margin-bottom:10px; font-size:1.3em; }
+    .card-back h3 { color:#a8cfff; margin-bottom:15px; font-size:1.3em; margin-top:25px; }
+    .card-front p { color:#c8d6ff; font-size:0.95em; line-height:1.5; }
+    .card-back { transform: rotateY(180deg); color:#eaf2ff; font-size:0.95em; line-height:1.5; text-align:left; }
+
+    /* FOOTER */
+    footer{
+      text-align:center;
+      padding:30px 0;
+      color:#7a8cb3;
+      font-size:0.9em;
+      border-top:1px solid rgba(255,255,255,0.05);
+      background:#02040c;
+      position: relative;
+      z-index:1;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- NUBES REALISTAS -->
+  <div class="nube-real nube1">
+    <div class="c1"></div>
+    <div class="c2"></div>
+    <div class="c3"></div>
+  </div>
+
+  <div class="nube-real nube2">
+    <div class="c1"></div>
+    <div class="c2"></div>
+    <div class="c3"></div>
+  </div>
+
+  <div class="nube-real nube3">
+    <div class="c1"></div>
+    <div class="c2"></div>
+    <div class="c3"></div>
+  </div>
+
+  <!-- LLUVIA -->
+  <script>
+    const numGotas = 80;
+    for(let i=0;i<numGotas;i++){
+      let drop = document.createElement('div');
+      drop.className = 'lluvia';
+      drop.style.left = Math.random()*100 + 'vw';
+      drop.style.animationDuration = (0.5 + Math.random()*1) + 's';
+      drop.style.animationDelay = Math.random()*5 + 's';
+      document.body.appendChild(drop);
+    }
+  </script>
+
+  <!-- NAVBAR -->
+  <nav>
+    <a href="{{ url_for('pronostico') }}">Pronóstico</a>
+    <a href="#">Agenda</a>
+    <a href="{{ url_for('comparar') }}">Comparar Lugares</a>
+    <a href="{{ url_for('educacion') }}">Educación</a>
+    <a href="/juego">Minijuegos</a> 
+    <a href="{{ url_for('iniciosesion') }}">Login</a>
+    <a href="#">ChatBot</a>
+    <a href="{{ url_for('perfil') }}">Mi Perfil</a>
+    <a href="{{ url_for('logout') }}" style="color:#ff6b6b;">Cerrar Sesión</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <img src="{{ url_for('static', filename='earth.png') }}" alt="Tierra flotante">
+    <div class="hero-text">
+      <h1>🌎 Aprende sobre Clima y Medio Ambiente</h1>
+      <p>Explora fenómenos extremos, cambio climático, energías renovables y ciencia del clima de manera visual y entretenida.</p>
+    </div>
+  </section>
+
+  <!-- TARJETAS EDUCATIVAS FLIP -->
+  <section class="cards-container">
+    <!-- Tarjeta 1 -->
+    <div class="card">
+      <div class="card-front">
+        <img src="{{ url_for('static', filename='tormenta.png') }}" alt="Tormenta">
+        <h3>Fenómenos Extremos</h3>
+        <p>Huracanes, tornados y olas de calor.</p>
+      </div>
+      <div class="card-back">
+        <h3>Fenómenos Extremos</h3>
+        <p>Huracanes, tornados y olas de calor son eventos meteorológicos intensos que pueden afectar gravemente la vida humana, la agricultura y los ecosistemas. </p>
+        <br>
+        <p>Su estudio ayuda a generar sistemas de alerta temprana y planes de mitigación efectivos.</p>
+      </div>
+    </div>
+
+    <!-- Tarjeta 2 -->
+    <div class="card">
+      <div class="card-front">
+        <img src="{{ url_for('static', filename='cambio_climatico.png') }}" alt="Cambio Climático">
+        <h3>Cambio Climático</h3>
+        <p>El planeta se calienta cada vez más.</p>
+      </div>
+      <div class="card-back">
+        <h3>Cambio Climático</h3>
+        <p>El cambio climático es causado principalmente por emisiones de gases de efecto invernadero. </p>
+        <br>
+        <p>Sus consecuencias incluyen aumento del nivel del mar, eventos climáticos extremos y pérdida de biodiversidad. La mitigación requiere acciones globales y locales.</p>
+      </div>
+    </div>
+
+    <!-- Tarjeta 3 -->
+    <div class="card">
+      <div class="card-front">
+        <img src="{{ url_for('static', filename='energia_renovable.png') }}" alt="Energía Renovable">
+        <h3>Energías Renovables</h3>
+        <p>Solar, eólica e hidroeléctrica.</p>
+      </div>
+      <div class="card-back">
+        <h3>Energías Renovables</h3>
+        <p>Estas energías provienen de fuentes naturales y ayudan a reducir la contaminación. </p>
+        <br>
+        <p>Su adopción masiva es clave para combatir el cambio climático y promover un desarrollo sostenible.</p>
+      </div>
+    </div>
+
+    <!-- Tarjeta 4 -->
+    <div class="card">
+      <div class="card-front">
+        <img src="{{ url_for('static', filename='viento.png') }}" alt="Viento">
+        <h3>Dinámica del Viento</h3>
+        <p>El aire en movimiento transporta calor y humedad.</p>
+      </div>
+      <div class="card-back">
+        <h3>Dinámica del Viento</h3>
+        <p>El viento se genera por diferencias de presión y temperatura. </p>
+        <br>
+        <p>Influye en el clima, la formación de nubes y la dispersión de contaminantes. Es fundamental para energías renovables como la eólica.</p>
+    </div>
+    </div>
+
+    <!-- Tarjeta 5 -->
+    <div class="card">
+      <div class="card-front">
+        <img src="{{ url_for('static', filename='experimentos.png') }}" alt="Experimentos">
+        <h3>Experimentos Caseros</h3>
+        <p>Aprende observando.</p>
+      </div>
+      <div class="card-back">
+        <h3>Experimentos Caseros</h3>
+        <p>Experimentos sencillos como crear nubes en frascos, medir la lluvia o la evaporación permiten entender mejor el ciclo del agua y los fenómenos climáticos de manera práctica.</p>
+      </div>
+    </div>
+
+    <!-- Tarjeta 6 -->
+    <div class="card">
+      <div class="card-front">
+        <img src="{{ url_for('static', filename='pronostico.png') }}" alt="Pronósticos">
+        <h3>Pronósticos del Clima</h3>
+        <p>Interpretar temperatura, lluvia y viento.</p>
+      </div>
+      <div class="card-back">
+        <h3>Pronósticos del Clima</h3>
+        <p>Usan satélites, radares y modelos matemáticos para anticipar lluvias, tormentas y cambios de temperatura. </p>
+        <br>
+        <p>Son esenciales para la agricultura, la aviación y la gestión de emergencias.</p>
+      </div>
+    </div>
+
+    <!-- Tarjeta 7 -->
+    <div class="card">
+      <div class="card-front">
+        <img src="{{ url_for('static', filename='sol.png') }}" alt="Radiación Solar">
+        <h3>Radiación Solar</h3>
+        <p>Energía que calienta la Tierra.</p>
+      </div>
+      <div class="card-back">
+        <h3>Radiación Solar</h3>
+        <p>La radiación solar es fundamental para la vida y el clima. Afecta la temperatura, evapotranspiración y el desarrollo de los ecosistemas. </p>
+        <br>
+        <p>Su estudio es clave para energías renovables y entender patrones climáticos.</p>
+      </div>
+    </div>
+
+    <!-- Tarjeta 8 -->
+    <div class="card">
+      <div class="card-front">
+        <img src="{{ url_for('static', filename='humedad.png') }}" alt="Humedad">
+        <h3>Humedad Atmosférica</h3>
+        <p>Cantidad de vapor de agua en el aire.</p>
+      </div>
+      <div class="card-back">
+        <h3>Humedad Atmosférica</h3>
+        <p>La humedad determina la sensación térmica, influencia las precipitaciones y afecta la agricultura.</p>
+        <br>
+        <p> Comprenderla es clave para pronósticos y control de climas interiores y exteriores.</p>
+      </div>
+    </div>
+
+    <!-- Tarjeta 9 -->
+    <div class="card">
+      <div class="card-front">
+        <img src="{{ url_for('static', filename='nieve.png') }}" alt="Nieve">
+        <h3>Formación de Nieve</h3>
+        <p>Cuando el agua se congela en la atmósfera.</p>
+      </div>
+      <div class="card-back">
+        <h3>Formación de Nieve</h3>
+        <p>La nieve se forma cuando la humedad se congela en capas de la atmósfera. </p>
+        <br>
+        <p>Es importante para los ciclos hidrológicos, el clima local y el abastecimiento de agua en regiones montañosas.</p>
+      </div>
+    </div>
+
+  </section>
+
+  <footer>
+    © 2025 EcoWheater | Diseñado con 💙 para universitarios curiosos
+  </footer>
+
+</body>
+</html>
