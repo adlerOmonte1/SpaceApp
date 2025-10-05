@@ -282,16 +282,23 @@ def daily_chart():
     lat, lon, date = data.get('latitude'), data.get('longitude'), data.get('date')
 
     horas = [f"{h:02d}:00" for h in range(24)]
-    temperaturas = []
-    
+    temperaturas, puntos_rocio, precipitaciones = [], [], []
+
     for hora in horas:
         resultado = pronosticar_clima(lat, lon, date, hora)
         temp = resultado.get('temperatura')
-        temperaturas.append(temp)
+        hum = resultado.get('humedad')  # Punto de rocío o humedad
+        prec = resultado.get('precipitacion')
+
+        temperaturas.append(temp if temp is not None else None)
+        puntos_rocio.append(hum if hum is not None else None)
+        precipitaciones.append(prec if prec is not None else 0)
 
     return jsonify({
         'labels': horas,
-        'temperatures': temperaturas
+        'temperatures': temperaturas,
+        'humidities': puntos_rocio,
+        'precipitations': precipitaciones
     })
 
 # --- ¡NUEVA API AÑADIDA! Para la página de comparación ---

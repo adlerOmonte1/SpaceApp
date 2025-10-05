@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         type: 'line',
                         label: 'Punto de Rocío (°C)',
                         data: chartData.humidities,
-                        borderColor: '#3498db',
+                        borderColor: '#70c6ffff',
                         yAxisID: 'y_temp_hum',
                         tension: 0.4
                     },
@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         type: 'bar',
                         label: 'Precipitación (mm)',
                         data: chartData.precipitations,
-                        backgroundColor: 'rgba(46, 204, 113, 0.5)',
+                        backgroundColor: 'rgba(0, 255, 106, 0.5)',
                         yAxisID: 'y_precip',
                     }
                 ]
