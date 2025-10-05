@@ -28,7 +28,6 @@ nav {
     backdrop-filter: blur(12px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     z-index: 1000;
-    box-shadow: 0 0 20px rgba(102, 170, 255, 0.15);
 }
 
 nav a {
@@ -67,11 +66,11 @@ nav a:hover { color: #66aaff; text-shadow: 0 0 8px #66aaff; }
     margin: 0 auto;
 }
 
-header {
+main > .container > header {
     margin-bottom: 40px;
 }
 
-header h2 {
+main > .container > header h2 {
     font-size: 2.8em;
     color: #89c4ff;
     margin-bottom: 20px;
@@ -87,7 +86,7 @@ header h2 {
     line-height: 1.6;
 }
 
-/* --- ESTILOS PARA LA BARRA DE BÚSQUEDA --- */
+/* ESTILOS PARA LA BARRA DE BÚSQUEDA */
 .search-container {
     display: flex;
     gap: 10px;
@@ -187,7 +186,7 @@ header h2 {
     box-shadow: 0 0 25px rgba(102, 170, 255, 0.6);
 }
 
-/* --- RESULTADOS --- */
+/* RESULTADOS */
 .results {
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -196,29 +195,46 @@ header h2 {
     text-align: left;
     display: none; /* Oculto por defecto */
 }
-
-.results h3 {
-    color: #89c4ff;
-    font-size: 1.8em;
-    margin-bottom: 10px;
-    text-align: center;
-}
-
-.result-description {
-    color: #eaf2ff;
-    font-size: 1.3em;
-    font-weight: 500;
-    text-align: center;
-    line-height: 1.6;
-    margin-bottom: 30px;
-}
-
-.chart-container {
-    position: relative;
-    height: 400px;
-    width: 100%;
-}
-
+.results h3 { color: #89c4ff; font-size: 1.8em; margin-bottom: 10px; text-align: center; }
+.result-description { color: #eaf2ff; font-size: 1.3em; text-align: center; line-height: 1.6; margin-bottom: 30px; }
+.chart-container { position: relative; height: 400px; width: 100%; }
 .loading { text-align: center; padding: 40px; color: #89c4ff; font-size: 1.2em; }
 .error-message { text-align: center; padding: 30px; color: #ff6b6b; }
 
+/* --- ¡NUEVO! ESTILOS PARA EL BOTÓN DE AGENDAR --- */
+.agenda-btn-container { text-align: center; margin-top: 30px; }
+#agendar-btn {
+    background: linear-gradient(90deg, #8e44ad, #9b59b6);
+    box-shadow: 0 0 15px rgba(155, 89, 182, 0.5);
+    padding: 12px 30px;
+    width: auto; /* Para que no ocupe el 100% */
+}
+#agendar-btn:hover {
+    box-shadow: 0 0 25px rgba(155, 89, 182, 0.7);
+}
+
+/* --- ¡NUEVO! ESTILOS PARA EL MODAL DE AGENDA --- */
+.modal {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.7); display: none; justify-content: center;
+    align-items: center; z-index: 2000; backdrop-filter: blur(5px);
+}
+.modal-content {
+    background: #0f1a33; padding: 25px 30px; border-radius: 15px;
+    width: 90%; max-width: 450px; text-align: left;
+    box-shadow: 0 0 20px rgba(102, 170, 255, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.modal-content h3 { color: #89c4ff; margin-bottom: 20px; font-size: 1.6em; }
+.form-group { margin-bottom: 15px; }
+.form-group label { display: block; color: #a8cfff; margin-bottom: 5px; font-size: 0.9em; }
+.form-group input, .form-group textarea {
+    width: 100%; padding: 10px 12px; border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.1); color: #fff;
+    font-family: 'Outfit', sans-serif; font-size: 1em;
+}
+.form-group input[readonly] { background: rgba(255, 255, 255, 0.05); cursor: not-allowed; }
+.modal-buttons { text-align: right; margin-top: 20px; }
+.modal-buttons button { padding: 10px 20px; margin-left: 10px; font-weight: bold; width: auto; }
+.modal-buttons #cancel-agenda-btn { background: transparent; border: 1px solid #555; }
