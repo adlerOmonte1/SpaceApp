@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -20,19 +21,19 @@
 </head>
 <body class="bg-gradient-to-b from-[#0a1930] to-[#00010f] font-display text-white min-h-screen flex flex-col">
     <!-- HEADER -->
-    <header>
-          <nav>
-    <a href="{{ url_for('pronostico') }}">Pronóstico</a>
-    <a href="#">Agenda</a>
-    <a href="{{ url_for('comparar') }}">Comparar Lugares</a>
-    <a href="{{ url_for('educacion') }}">Educacion</a>
-    <a href="/juego">Minijuegos</a> 
-    <a href="{{ url_for('iniciosesion') }}">Login</a>
-    <a href="#">ChatBot</a>
-    <a href="{{ url_for('perfil') }}">Mi Perfil</a>
-    <a href="{{ url_for('logout') }}" style="color:#ff6b6b;">Cerrar Sesión</a>
-</nav>
-    </header>
+        <header>
+            <nav>
+        <a href="{{ url_for('pronostico') }}">Pronóstico</a>
+        <a href="#">Agenda</a>
+        <a href="{{ url_for('comparar') }}">Comparar Lugares</a>
+        <a href="{{ url_for('educacion') }}">Educacion</a>
+        <a href="/juego">Minijuegos</a> 
+        <a href="{{ url_for('iniciosesion') }}">Login</a>
+        <a href="#">ChatBot</a>
+        <a href="{{ url_for('perfil') }}">Mi Perfil</a>
+        <a href="{{ url_for('logout') }}" style="color:#ff6b6b;">Cerrar Sesión</a>
+    </nav>
+        </header>
     <!-- MAIN -->
     <main class="flex-grow pt-28 pb-12 comparison-section">
         <div class="hero-text">
@@ -47,9 +48,10 @@
     </main>
     <!-- FOOTER -->
     <footer class="text-center py-6 text-sm text-gray-400 border-t border-white/10 bg-[#02040c]">
-        © 2025 EcoWeather | Designed with 💙 for the planet
+        © 2025 EcoWeather | Diseñado con 💙 para el planeta
     </footer>
     <!-- Script -->
     <script src="{{ url_for('static', filename='js/comparar.js') }}"></script>
 </body>
 </html>
+
