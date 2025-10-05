@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoWeather - Pronóstico</title>
+    <!-- Librerías Externas -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Enlace a tus archivos locales (CORREGIDO PARA FLASK) -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/pronostico.css') }}">
+</head>
+<body>
+    <!-- NAVBAR -->
+    <header>
+          <nav>
+    <a href="{{ url_for('pronostico') }}">Pronóstico</a>
+    <a href="#">Agenda</a>
+    <a href="{{ url_for('comparar') }}">Comparar Lugares</a>
+    <a href="{{ url_for('educacion') }}">Educacion</a>
+    <a href="/juego">Minijuegos</a> 
+    <a href="{{ url_for('iniciosesion') }}">Login</a>
+    <a href="#">ChatBot</a>
+    <a href="{{ url_for('perfil') }}">Mi Perfil</a>
+    <a href="{{ url_for('logout') }}" style="color:#ff6b6b;">Cerrar Sesión</a>
+</nav>
+    </header>
+
+    <!-- SECCIÓN PRINCIPAL -->
+    <main class="pronostico">
+        <div class="container">
+            <header>
+                <h2>Pronóstico Climatológico Detallado</h2>
+                <p class="subtitle">Busca un lugar por nombre, selecciona un punto en el mapa o ingresa coordenadas para obtener una predicción climatológica avanzada.</p>
+            </header>
+
+            <!-- ¡NUEVA SECCIÓN DE BÚSQUEDA AÑADIDA! -->
+            <div class="search-container">
+                <input type="text" id="search-input" placeholder="Buscar lugar en Perú (ej. Machu Picchu, Tingo Maria)...">
+                <button id="search-btn">Buscar</button>
+            </div>
+            
+            <div id="map"></div>
+            
+            <div class="form-container">
+                <div class="input-group">
+                    <input type="text" id="manual-lat" placeholder="Latitud (ej. -9.93)">
+                    <input type="text" id="manual-lon" placeholder="Longitud (ej. -76.24)">
+                    <input type="date" id="manual-date">
+                    <input type="time" id="manual-time" value="14:00">
+                </div>
+                <button id="get-manual-btn">Consultar Datos</button>
+            </div>
+
+            <div class="results" id="results">
+                <!-- Los resultados y el gráfico aparecerán aquí -->
+            </div>
+        </div>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/pronostico.js') }}"></script>
+</body>
+</html>

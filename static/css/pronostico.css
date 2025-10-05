@@ -1,0 +1,224 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Outfit', sans-serif;
+    background: radial-gradient(circle at 25% 25%, #0a1930, #00010f 80%);
+    color: #eaf2ff;
+    overflow-x: hidden;
+    min-height: 100vh;
+}
+
+/* NAVBAR */
+nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    padding: 18px 0;
+    background: rgba(10, 15, 40, 0.35);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    z-index: 1000;
+    box-shadow: 0 0 20px rgba(102, 170, 255, 0.15);
+}
+
+nav a {
+    color: #b8d0ff;
+    text-decoration: none;
+    font-weight: 400;
+    transition: 0.3s;
+    letter-spacing: 1px;
+    font-size: 0.95em;
+    position: relative;
+    padding: 5px 0;
+}
+
+nav a::after {
+    content: "";
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0%;
+    height: 2px;
+    background: #66aaff;
+    transition: width 0.3s;
+}
+
+nav a:hover::after { width: 100%; }
+nav a:hover { color: #66aaff; text-shadow: 0 0 8px #66aaff; }
+
+/* SECCIÓN PRINCIPAL */
+.pronostico {
+    padding: 120px 8% 90px;
+    text-align: center;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+header {
+    margin-bottom: 40px;
+}
+
+header h2 {
+    font-size: 2.8em;
+    color: #89c4ff;
+    margin-bottom: 20px;
+    letter-spacing: 2px;
+}
+
+.subtitle {
+    font-size: 1.2em;
+    color: #c9d8ff;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
+}
+
+/* --- ESTILOS PARA LA BARRA DE BÚSQUEDA --- */
+.search-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+#search-input {
+    flex-grow: 1;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    padding: 15px 20px;
+    color: #eaf2ff;
+    font-size: 1em;
+    transition: all 0.3s ease;
+}
+
+#search-input:focus {
+    outline: none;
+    border-color: #66aaff;
+    box-shadow: 0 0 15px rgba(102, 170, 255, 0.4);
+}
+
+#search-btn {
+    background: linear-gradient(90deg, #0055aa, #003366);
+    border: none;
+    padding: 15px 25px;
+    border-radius: 12px;
+    color: #eaf2ff;
+    font-size: 1em;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#search-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(102, 170, 255, 0.5);
+}
+
+#map {
+    height: 400px;
+    width: 100%;
+    border-radius: 22px;
+    margin-bottom: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 25px rgba(102, 170, 255, 0.2);
+}
+
+.form-container {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 22px;
+    padding: 35px 28px;
+    margin-bottom: 30px;
+}
+
+.input-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.form-container input {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    padding: 15px 20px;
+    color: #eaf2ff;
+    font-size: 1em;
+    transition: all 0.3s ease;
+}
+
+.form-container input:focus {
+    outline: none;
+    border-color: #66aaff;
+    box-shadow: 0 0 15px rgba(102, 170, 255, 0.4);
+}
+
+.form-container button {
+    background: linear-gradient(90deg, #003366, #0055aa);
+    border: none;
+    padding: 15px 35px;
+    border-radius: 12px;
+    color: #eaf2ff;
+    font-size: 1.1em;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 15px rgba(102, 170, 255, 0.4);
+    width: 100%;
+}
+
+.form-container button:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 25px rgba(102, 170, 255, 0.6);
+}
+
+/* --- RESULTADOS --- */
+.results {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 22px;
+    padding: 35px 28px;
+    text-align: left;
+    display: none; /* Oculto por defecto */
+}
+
+.results h3 {
+    color: #89c4ff;
+    font-size: 1.8em;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.result-description {
+    color: #eaf2ff;
+    font-size: 1.3em;
+    font-weight: 500;
+    text-align: center;
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+.chart-container {
+    position: relative;
+    height: 400px;
+    width: 100%;
+}
+
+.loading { text-align: center; padding: 40px; color: #89c4ff; font-size: 1.2em; }
+.error-message { text-align: center; padding: 30px; color: #ff6b6b; }
+
