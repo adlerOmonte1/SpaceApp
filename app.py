@@ -187,6 +187,10 @@ def index():
 def inicio():
     return render_template('index.html')
 
+@app.route('/agenda')
+def agenda():
+    return render_template('agenda.html')
+
 @app.route('/info')
 def info_clima():
     return render_template('info_clima.html')
