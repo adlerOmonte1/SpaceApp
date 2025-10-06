@@ -593,6 +593,61 @@ def logout():
     session.clear()  # limpia toda la sesión
     return redirect(url_for('inicio'))  # redirige al inicio
 
+# --- ¡NUEVO! FUNCIÓN Y RUTA PARA EL CHATBOT DE GEMINI ---
+def call_gemini_api(user_message):
+    """Llama a la API de Gemini para obtener una respuesta del chatbot."""
+    # Define la personalidad y las capacidades del bot.
+    system_prompt = """
+    Eres 'ClimaBot', un asistente experto en planificación de viajes para la aplicación EcoWeather. 
+    Tu propósito es ayudar a los usuarios a planificar actividades en PERÚ.
+    Tus capacidades son:
+    1.  **Sugerir Lugares:** Si un usuario menciona una actividad (ej. "hacer trekking", "ir a la playa", "visitar ruinas"), sugiere 3 lugares excelentes en Perú para esa actividad, describiendo brevemente por qué son buenos.
+    2.  **Dar Recomendaciones:** Si el pronóstico del tiempo es adverso (lluvia, frío), proporciona consejos prácticos (ej. "si llueve, lleva un poncho impermeable", "para el frío de la sierra, es bueno abrigarse en capas").
+    3.  **Guiar en la App:** Si el usuario pregunta cómo hacer algo, guíalo. Por ejemplo, si dice "quiero comparar", dile que use el enlace 'Comparar' en la barra de navegación.
+    Sé siempre amigable, conciso y útil.
+    """
+    
+    # IMPORTANTE: No se requiere una API Key aquí, se asume que el entorno la provee.
+    api_key = "AIzaSyBhA4MahNUFlTAGdeClV6q376k-AYbIkUc" 
+    api_url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key={api_key}"
+    
+    payload = {
+        "contents": [{"parts": [{"text": user_message}]}],
+        "systemInstruction": {"parts": [{"text": system_prompt}]},
+    }
+    
+    try:
+        response = requests.post(api_url, json=payload, headers={'Content-Type': 'application/json'})
+        response.raise_for_status() # Lanza un error si la respuesta no es 2xx
+        result = response.json()
+        
+        # Extraer el texto de la respuesta de Gemini
+        candidate = result.get("candidates", [{}])[0]
+        content = candidate.get("content", {}).get("parts", [{}])[0]
+        return content.get("text", "No pude procesar tu solicitud en este momento.")
+    except requests.exceptions.RequestException as e:
+        print(f"❌ Error al llamar a la API de Gemini: {e}")
+        return "Hubo un problema de conexión con el asistente. Inténtalo más tarde."
+    except (KeyError, IndexError):
+        print(f"❌ Error: La respuesta de la API de Gemini no tuvo el formato esperado.")
+        return "Recibí una respuesta inesperada del asistente."
+
+@app.route('/api/chatbot', methods=['POST'])
+def chatbot_logic():
+    data = request.json
+    user_message = data.get('message', '').lower()
+    
+    if not user_message:
+        return jsonify({'response': 'Por favor, escribe un mensaje.'})
+
+    # Llama a la nueva función de Gemini
+    bot_response = call_gemini_api(user_message)
+    
+    # Por ahora, no redirigimos automáticamente, Gemini dará las instrucciones.
+    return jsonify({'response': bot_response, 'redirect_url': None})
+
+
+
 # ---------------- EJECUCIÓN ----------------
 if __name__ == '__main__':
     # Inicializa la base de datos y la tabla usuarios

@@ -1,32 +1,29 @@
 document.addEventListener('DOMContentLoaded', () => {
     // --- ELEMENTOS DEL DOM ---
     const map = L.map('map').setView([-9.9, -76.2], 5);
-    const latInput = document.getElementById('manual-lat');
-    const lonInput = document.getElementById('manual-lon');
     const dateInput = document.getElementById('manual-date');
     const timeInput = document.getElementById('manual-time');
     const getManualBtn = document.getElementById('get-manual-btn');
     const resultsDiv = document.getElementById('results');
     const searchInput = document.getElementById('search-input');
     const searchBtn = document.getElementById('search-btn');
-    // --- Elementos para el modal de agenda ---
     const agendaModal = document.getElementById('agenda-modal');
 
     let dailyChart = null; 
     let marker = null;
+    let selectedLat = -9.9;
+    let selectedLon = -76.2;
 
     // --- INICIALIZACIÓN DE MAPA ---
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
-    // --- FUNCIONES ---
-
-    // ¡NUEVO! Funciones para controlar el modal de la agenda
+    // --- FUNCIONES DEL MODAL ---
     function openAgendaModal(lugar, fecha, hora) {
         document.getElementById('evento-lugar').value = lugar;
         document.getElementById('evento-fecha').value = `${fecha} ${hora}`;
-        document.getElementById('evento-desc').value = ''; // Limpiar descripción
+        document.getElementById('evento-desc').value = '';
         agendaModal.style.display = 'flex';
     }
 
@@ -53,10 +50,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
 
             if (!response.ok) {
-                // Si la razón es 'No autorizado', redirigir al login
                 if (response.status === 401) {
                     alert('Debes iniciar sesión para poder agendar un evento.');
-                    window.location.href = '/login'; // Redirige al login
+                    window.location.href = '/login';
                 } else {
                     throw new Error(data.error || 'Error al guardar el evento.');
                 }
@@ -137,10 +133,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!mainResponse.ok) throw new Error('No se pudo obtener la descripción.');
             const mainData = await mainResponse.json();
             
-            // --- ¡NUEVO! Lógica para mostrar el botón "Agendar" ---
             let agendarBtnHTML = '';
             const hoy = new Date();
-            hoy.setHours(0,0,0,0); // Poner la hora a cero para comparar solo fechas
+            hoy.setHours(0,0,0,0);
             const fechaConsultada = new Date(date + 'T00:00:00');
 
             if (fechaConsultada >= hoy) {
@@ -161,7 +156,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 ${agendarBtnHTML} 
             `;
 
-            // --- ¡NUEVO! Añadir evento al botón "Agendar" si existe ---
             if (fechaConsultada >= hoy) {
                 document.getElementById('agendar-btn').addEventListener('click', () => {
                     openAgendaModal(mainData.departamento || 'Ubicación seleccionada', date, time);
@@ -182,27 +176,25 @@ document.addEventListener('DOMContentLoaded', () => {
             resultsDiv.innerHTML = `<p class="error-message">Error al conectar con el servidor.</p>`;
         }
     }
-    
+
     // --- EVENTOS ---
     getManualBtn.addEventListener('click', () => {
-        const lat = parseFloat(latInput.value);
-        const lon = parseFloat(lonInput.value);
         const date = dateInput.value;
         const time = timeInput.value;
-        if (isNaN(lat) || isNaN(lon) || !date || !time) { return alert('Por favor, ingresa datos válidos.'); }
-        fetchData(lat, lon, date, time);
+        if (!date || !time) return alert('Por favor, selecciona fecha y hora.');
+        fetchData(selectedLat, selectedLon, date, time);
     });
     
     map.on('click', (e) => {
-        latInput.value = e.latlng.lat.toFixed(5);
-        lonInput.value = e.latlng.lng.toFixed(5);
+        selectedLat = e.latlng.lat;
+        selectedLon = e.latlng.lng;
         if (marker) map.removeLayer(marker);
         marker = L.marker(e.latlng).addTo(map);
     });
 
     async function handleSearch() {
         const placeName = searchInput.value.trim();
-        if (placeName === '') { return alert('Ingresa un nombre de lugar.'); }
+        if (placeName === '') return alert('Ingresa un nombre de lugar.');
         searchBtn.textContent = 'Buscando...';
         searchBtn.disabled = true;
         try {
@@ -216,11 +208,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error(errorData.error || 'Lugar no encontrado.');
             }
             const data = await response.json();
-            latInput.value = data.latitude.toFixed(5);
-            lonInput.value = data.longitude.toFixed(5);
+            selectedLat = data.latitude;
+            selectedLon = data.longitude;
             if (marker) map.removeLayer(marker);
-            map.setView([data.latitude, data.longitude], 13);
-            marker = L.marker([data.latitude, data.longitude]).addTo(map).bindPopup(data.place_name).openPopup();
+            map.setView([selectedLat, selectedLon], 13);
+            marker = L.marker([selectedLat, selectedLon]).addTo(map).bindPopup(data.place_name).openPopup();
         } catch (error) {
             alert(error.message);
         } finally {
@@ -231,16 +223,92 @@ document.addEventListener('DOMContentLoaded', () => {
 
     searchBtn.addEventListener('click', handleSearch);
     searchInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') { handleSearch(); }
+        if (e.key === 'Enter') handleSearch();
     });
 
-    // Eventos para el modal
     document.getElementById('cancel-agenda-btn').addEventListener('click', closeAgendaModal);
     document.getElementById('save-agenda-btn').addEventListener('click', saveAgendaEvent);
     agendaModal.addEventListener('click', (e) => {
-        if (e.target === agendaModal) { closeAgendaModal(); }
+        if (e.target === agendaModal) closeAgendaModal();
     });
 
     dateInput.value = new Date().toISOString().split('T')[0];
 });
 
+
+// --- CHATBOT ---
+document.addEventListener('DOMContentLoaded', () => {
+    const chatbotToggler = document.querySelector(".chatbot-toggler");
+    const chatInput = document.querySelector(".chat-input textarea");
+    const sendChatBtn = document.getElementById("send-chat-btn");
+    const chatbox = document.querySelector(".chatbox");
+
+    if (!chatbotToggler || !chatInput || !sendChatBtn || !chatbox) {
+        console.warn("Elementos del chatbot no encontrados. Asegúrate de que el HTML esté correcto.");
+        return;
+    }
+
+    const createChatLi = (message, className) => {
+        const chatLi = document.createElement("li");
+        chatLi.classList.add("chat", className);
+        let chatContent = className === "outgoing" ? `<p>${message}</p>` : `<span>🤖</span><p></p>`;
+        chatLi.innerHTML = chatContent;
+        if (className === "incoming") {
+            const p = chatLi.querySelector("p");
+            p.textContent = message;
+        }
+        return chatLi;
+    }
+
+    const handleChat = async () => {
+        const userMessage = chatInput.value.trim();
+        if (!userMessage) return;
+
+        chatInput.value = "";
+        chatbox.appendChild(createChatLi(userMessage, "outgoing"));
+        chatbox.scrollTo(0, chatbox.scrollHeight);
+
+        const incomingChatLi = createChatLi("...", "incoming");
+        chatbox.appendChild(incomingChatLi);
+        chatbox.scrollTo(0, chatbox.scrollHeight);
+
+        try {
+            const response = await fetch("/api/chatbot", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message: userMessage }),
+            });
+            const data = await response.json();
+
+            const thinkingP = incomingChatLi.querySelector("p");
+            thinkingP.textContent = data.response;
+
+            if (data.redirect_url) {
+                setTimeout(() => {
+                    window.location.href = data.redirect_url;
+                }, 1200);
+            }
+
+        } catch (error) {
+            const thinkingP = incomingChatLi.querySelector("p");
+            thinkingP.textContent = "¡Ups! Algo salió mal. Por favor, intenta de nuevo.";
+            console.error("Error al contactar al chatbot:", error);
+        } finally {
+            chatbox.scrollTo(0, chatbox.scrollHeight);
+        }
+    }
+
+    sendChatBtn.addEventListener("click", handleChat);
+    chatInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            handleChat();
+        }
+    });
+
+    chatbotToggler.addEventListener("click", () => document.body.classList.toggle("show-chatbot"));
+    const closeBtn = document.querySelector(".chatbot header .close-btn");
+    if (closeBtn) {
+       closeBtn.addEventListener("click", () => document.body.classList.remove("show-chatbot"));
+    }
+});

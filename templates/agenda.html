@@ -8,17 +8,15 @@
 </head>
 <body>
     <!-- NAVBAR -->
- <nav>
-    <a href="/inicio">Home</a>
-    <a href="{{ url_for('pronostico') }}">Forecast</a>
-    <a href="{{ url_for('agenda') }}">Schedule</a>
-    <a href="{{ url_for('comparar') }}">Compare Places</a>
-    <a href="{{ url_for('educacion') }}">Education</a>
-    <a href="/juego">Mini Games</a> 
-    <a href="{{ url_for('iniciosesion') }}">Login</a>
-    <a href="{{ url_for('perfil') }}">My Profile</a>
-    <a href="{{ url_for('logout') }}" style="color:#ff6b6b;">Log Out</a>
-</nav>
+    <nav>
+        <a href="{{ url_for('inicio') }}">Inicio</a>
+        <a href="{{ url_for('pronostico') }}">Pronóstico</a>
+        <a href="{{ url_for('agenda') }}">Agenda</a>
+        <a href="{{ url_for('comparar') }}">Comparar Lugares</a>
+        <a href="{{ url_for('educacion') }}">Educación</a>
+        <a href="{{ url_for('login') }}">Login</a>
+        <a href="{{ url_for('perfil') }}">Mi Perfil</a>
+    </nav>
 
     <!-- CONTENEDOR CALENDARIO -->
     <div class="calendar-container">
