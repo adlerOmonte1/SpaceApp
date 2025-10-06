@@ -13,13 +13,16 @@ tailwind.config = {
 // --- HTML TEMPLATE FOR EACH CARD ---
 const cardTemplate = (data, cardId) => `
   <div class="flex flex-col gap-6">
-    <!-- NEW! Search Bar -->
+    <!-- Search Bar -->
     <div class="search-container">
         <input id="search-input-${cardId}" class="w-full" type="text" placeholder="Search location in Peru..."/>
         <button id="search-btn-${cardId}" class="px-4 rounded-lg">Search</button>
     </div>
     
-    <div id="map-${cardId}" class="aspect-video w-full rounded-lg shadow-md border border-white/10"></div>
+    <div id="media-container-${cardId}" class="aspect-video w-full rounded-lg shadow-md border border-white/10">
+        <div id="map-${cardId}" class="w-full h-full"></div>
+    </div>
+    
     <div class="flex gap-2">
       <button id="location-btn-${cardId}" class="w-full flex items-center justify-center gap-2 py-2 px-4 rounded-lg bg-primary/10 text-primary font-semibold hover:bg-primary/20 transition-colors">
         <span class="material-symbols-outlined">my_location</span>
@@ -49,7 +52,7 @@ const cardTemplate = (data, cardId) => `
       </div>
     </div>
     <button id="consult-btn-${cardId}" class="w-full py-3 px-4 rounded-lg bg-primary text-white font-bold hover:opacity-90 transition-opacity">Get Data</button>
-    <div class="border-t border-white/20 pt-6">
+    <div id="results-container-${cardId}" class="border-t border-white/20 pt-6">
       <h3 class="text-lg font-bold mb-4">Results</h3>
       <div class="space-y-4 text-sm">
         <div class="flex justify-between py-2 border-b border-white/10"><span>City</span><span class="font-semibold text-white">${data.ciudad}</span></div>
@@ -67,7 +70,6 @@ const cardTemplate = (data, cardId) => `
 `;
 
 // --- APPLICATION LOGIC ---
-const videoDatabase = { "-13.1631,-72.5450": { day: "/static/Videos/MachuPichuDia.mp4" } };
 
 function initializeCard(cardId, initialData) {
     const cardContainer = document.getElementById(`card${cardId}`);
@@ -76,6 +78,7 @@ function initializeCard(cardId, initialData) {
     const map = L.map(`map-${cardId}`).setView([initialData.lat, initialData.lon], 10);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
     let marker = L.marker([initialData.lat, initialData.lon]).addTo(map);
+    let isShowingVideo = false;
     
     // --- Card Elements ---
     const consultBtn = document.getElementById(`consult-btn-${cardId}`);
@@ -85,11 +88,32 @@ function initializeCard(cardId, initialData) {
     const lonInput = document.getElementById(`lon-input-${cardId}`);
     const searchInput = document.getElementById(`search-input-${cardId}`);
     const searchBtn = document.getElementById(`search-btn-${cardId}`);
+    const dateInput = document.getElementById(`date-input-${cardId}`);
+    const timeInput = document.getElementById(`time-input-${cardId}`);
+    const resultsContainer = document.getElementById(`results-container-${cardId}`);
 
-    // --- Search Function ---
+    // --- Function to Update UI with new data ---
+    function updateUI(data) {
+        resultsContainer.innerHTML = `
+            <h3 class="text-lg font-bold mb-4">Results</h3>
+            <div class="space-y-4 text-sm">
+                <div class="flex justify-between py-2 border-b border-white/10"><span>City</span><span class="font-semibold text-white">${data.ciudad}</span></div>
+                <div class="flex justify-between py-2 border-b border-white/10"><span>Country</span><span class="font-semibold text-white">${data.pais}</span></div>
+                <div class="flex justify-between py-2 border-b border-white/10"><span>Forecast</span><span class="font-semibold text-white">${data.pronostico}</span></div>
+                <div class="flex justify-between py-2 border-b border-white/10"><span>Precipitation (mm)</span><span class="font-semibold text-white">${data.precipitacion}</span></div>
+                <div class="flex justify-between py-2 border-b border-white/10"><span>Relative Humidity</span><span class="font-semibold text-white">${data.humedad}%</span></div>
+            </div>
+            <div class="mt-6 p-4 bg-primary/10 rounded-lg flex items-center justify-between">
+                <div><p class="text-sm">Temperature</p><p class="text-2xl font-bold text-white">${data.temp}°C</p></div>
+                <span class="material-symbols-outlined text-4xl text-primary">thermostat</span>
+            </div>
+        `;
+    }
+
+    // --- Location Search Function ---
     async function handleSearch() {
         const placeName = searchInput.value.trim();
-        if (!placeName) return alert("Enter a location to search.");
+        if (!placeName) return alert("Please enter a location to search.");
         searchBtn.textContent = "Searching...";
         try {
             const response = await fetch('/api/search_location', {
@@ -111,15 +135,15 @@ function initializeCard(cardId, initialData) {
         }
     }
     
+    // --- Events ---
     searchBtn.addEventListener('click', handleSearch);
     searchInput.addEventListener('keypress', e => e.key === 'Enter' && handleSearch());
 
-    // --- Other Events ---
     consultBtn.addEventListener('click', async () => {
         const lat = parseFloat(latInput.value);
         const lon = parseFloat(lonInput.value);
-        const date = document.getElementById(`date-input-${cardId}`).value;
-        const time = document.getElementById(`time-input-${cardId}`).value;
+        const date = dateInput.value;
+        const time = timeInput.value;
 
         if (isNaN(lat) || isNaN(lon) || !date || !time) {
             return alert("Please fill out all fields.");
@@ -133,10 +157,13 @@ function initializeCard(cardId, initialData) {
                 body: JSON.stringify({ latitude: lat, longitude: lon, date, time })
             });
             const data = await response.json();
-            data.lat = lat; data.lon = lon;
-            initializeCard(cardId, data);
+            // CORRECTED! Do not call initializeCard, just update the UI.
+            updateUI(data);
         } catch (error) {
             alert("Error connecting to the server.");
+        } finally {
+            consultBtn.textContent = "Get Data";
+            consultBtn.disabled = false;
         }
     });
 
@@ -155,9 +182,36 @@ function initializeCard(cardId, initialData) {
         marker = L.marker(e.latlng).addTo(map);
     });
 
+    // --- NEW! Logic for the video button ---
     simulateBtn.addEventListener('click', () => {
-        // Simplified video logic
-        alert("Video feature under development.");
+        const mediaContainer = document.getElementById(`media-container-${cardId}`);
+        const staticVideoSrc = '/static/videos/MachuPicchuNoche.mp4'; // <- CHANGE THIS PATH TO YOUR VIDEO!
+
+        if (!isShowingVideo) {
+            mediaContainer.innerHTML = `
+                <video class="w-full h-full rounded-lg object-cover" autoplay loop muted playsinline>
+                    <source src="${staticVideoSrc}" type="video/mp4">
+                    Your browser does not support videos.
+                </video>`;
+            simulateBtn.innerHTML = `<span class="material-symbols-outlined">map</span><span>View Map</span>`;
+            isShowingVideo = true;
+        } else {
+            mediaContainer.innerHTML = ''; // Clear the container
+            const newMapDiv = document.createElement('div');
+            newMapDiv.id = `map-${cardId}`;
+            newMapDiv.className = 'w-full h-full';
+            mediaContainer.appendChild(newMapDiv);
+
+            // It's necessary to re-initialize the map
+            const lat = parseFloat(latInput.value) || initialData.lat;
+            const lon = parseFloat(lonInput.value) || initialData.lon;
+            const newMap = L.map(`map-${cardId}`).setView([lat, lon], 10);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(newMap);
+            marker = L.marker([lat, lon]).addTo(newMap);
+
+            simulateBtn.innerHTML = `<span class="material-symbols-outlined">movie</span><span>Watch Video</span>`;
+            isShowingVideo = false;
+        }
     });
 }
 
@@ -172,3 +226,4 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeCard(1, initialData1);
     initializeCard(2, initialData2);
 });
+
