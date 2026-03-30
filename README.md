@@ -23,22 +23,23 @@ Sigue estos pasos en tu terminal para clonar y ejecutar el proyecto localmente:
 git clone https://github.com/adlerOmonte1/GameVault.git
 cd GameVault
 ```
-**2. Instalar todas las dependencias y librerías de navegación e íconos:
+**2. Instalar todas las dependencias y librerías de navegación e íconos:**
 ```bash
 npm install
 npm install @react-navigation/native @react-navigation/stack @react-navigation/bottom-tabs react-native-screens react-native-safe-area-context react-native-gesture-handler react-native-reanimated @react-native-masked-view/masked-view react-native-vector-icons react-native-worklets
 ```
-**3. Configuración para iOS (Obligatorio en Mac):
+**3. Configuración para iOS (Obligatorio en Mac):**
 ```bash
 cd ios
 pod install
 cd ..
 ```
-**4. Ejecutar la aplicación:
+**4. Ejecutar la aplicación:**
 Para arrancar el proyecto en el simulador de iPhone (iOS):
 ```bash
 npx react-native run-ios
 ```
+
 Para arrancar el proyecto en el simulador de Android:
 ```bash
 npx react-native run-android
