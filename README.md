@@ -38,7 +38,7 @@ cd ..
 
 Para arrancar el proyecto en el simulador de iPhone (iOS):
 ```bash
-npx react-native run-ios
+npx react-native run-ios --simulator="iPhone 17"
 ```
 
 Para arrancar el proyecto en el simulador de Android:
