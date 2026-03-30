@@ -35,6 +35,7 @@ pod install
 cd ..
 ```
 **4. Ejecutar la aplicación:**
+
 Para arrancar el proyecto en el simulador de iPhone (iOS):
 ```bash
 npx react-native run-ios
