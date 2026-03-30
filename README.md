@@ -1,7 +1,8 @@
 # GameVault 🎮
 
-**Estudiante:** Adler Clin Omonte Sanchez
-**Estudiante:** Treycy Bridney Andres Sebastian
+**Estudiante 1:** Adler Clin Omonte Sanchez
+
+**Estudiante 2:** Treycy Bridney Andres Sebastian
 
 ## 📝 Descripción del Proyecto
 GameVault es una aplicación móvil desarrollada en React Native que funciona como un catálogo interactivo de videojuegos. Permite a los usuarios explorar una lista de títulos, consultar detalles específicos con navegación fluida, leer noticias de recintes de gaming y simular la adición de nuevos juegos mediante un formulario.
