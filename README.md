@@ -11,7 +11,7 @@ GameVault is a mobile application developed in React Native that functions as an
 * **Framework:** React Native CLI (Functional Components with Hooks)
 * **Navigation:** React Navigation (Stack Navigation & Bottom Tabs)
 * **State Management & Lifecycle:** React Hooks
-* **User Interface:** React Native Safe Area Context, Vector Icons (Ionicons)
+* **User Interface:** React Native Safe Area Context, Vector Icons
 * **Testing Platforms:** iOS Simulator and Android
 
 ## 🛠️ Installation and Setup Instructions
@@ -20,7 +20,7 @@ Follow these steps in your terminal to clone and run the project locally:
 
 **1. Clone the repository and navigate to the folder:**
 ```bash
-git clone [https://github.com/adlerOmonte1/GameVault.git](https://github.com/adlerOmonte1/GameVault.git)
+git clone https://github.com/adlerOmonte1/GameVault.git
 cd GameVault
 ```
 **2. Install all dependencies, navigation libraries, and icons:**
@@ -36,7 +36,7 @@ cd ..
 ```
 **4. Run the application:**
 
-To start the project on the iPhone simulator (iOS)::
+To start the project on the iPhone simulator (iOS):
 ```bash
 npx react-native run-ios --simulator="iPhone 17"
 ```
