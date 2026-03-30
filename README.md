@@ -1,7 +1,6 @@
 # GameVault 🎮
 
 **Estudiante 1:** Adler Clin Omonte Sanchez
-
 **Estudiante 2:** Treycy Bridney Andres Sebastian
 
 ## 📝 Descripción del Proyecto
