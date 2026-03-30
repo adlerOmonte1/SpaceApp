@@ -1,47 +1,47 @@
 # GameVault 🎮
 
-**Estudiante 1:** Adler Clin Omonte Sanchez
+**Student 1:** Adler Clin Omonte Sanchez
 
-**Estudiante 2:** Treycy Bridney Andres Sebastian
+**Student 2:** Treycy Bridney Andres Sebastian
 
-## 📝 Descripción del Proyecto
-GameVault es una aplicación móvil desarrollada en React Native que funciona como un catálogo interactivo de videojuegos. Permite a los usuarios explorar una lista de títulos, consultar detalles específicos con navegación fluida, leer noticias de recintes de gaming y simular la adición de nuevos juegos mediante un formulario.
+## 📝 Project Description
+GameVault is a mobile application developed in React Native that functions as an interactive video game catalog. It allows users to explore a list of titles, view specific details with seamless navigation, read the latest gaming news, and simulate adding new games through a form.
 
-## 💻 Tecnologías Utilizadas
-* Framework: React Native CLI (Funcional con Hooks)
-* Navegación: React Navigation (Stack Navigation & Bottom Tabs)
-* Gestión de Estado y Ciclo de Vida: React Hooks
-* Interfaz de Usuario: React Native Safe Area Context, Vector Icons (Ionicons)
-* Plataforma de pruebas: iOS Simulator y Android
+## 💻 Technologies Used
+* **Framework:** React Native CLI (Functional Components with Hooks)
+* **Navigation:** React Navigation (Stack Navigation & Bottom Tabs)
+* **State Management & Lifecycle:** React Hooks
+* **User Interface:** React Native Safe Area Context, Vector Icons (Ionicons)
+* **Testing Platforms:** iOS Simulator and Android
 
-## 🛠️ Instrucciones de Instalación y Ejecución
+## 🛠️ Installation and Setup Instructions
 
-Sigue estos pasos en tu terminal para clonar y ejecutar el proyecto localmente:
+Follow these steps in your terminal to clone and run the project locally:
 
-**1. Clonar el repositorio y entrar a la carpeta:**
+**1. Clone the repository and navigate to the folder:**
 ```bash
-git clone https://github.com/adlerOmonte1/GameVault.git
+git clone [https://github.com/adlerOmonte1/GameVault.git](https://github.com/adlerOmonte1/GameVault.git)
 cd GameVault
 ```
-**2. Instalar todas las dependencias y librerías de navegación e íconos:**
+**2. Install all dependencies, navigation libraries, and icons:**
 ```bash
 npm install
 npm install @react-navigation/native @react-navigation/stack @react-navigation/bottom-tabs react-native-screens react-native-safe-area-context react-native-gesture-handler react-native-reanimated @react-native-masked-view/masked-view react-native-vector-icons react-native-worklets
 ```
-**3. Configuración para iOS (Obligatorio en Mac):**
+**3. iOS Configuration (Mandatory on Mac):**
 ```bash
 cd ios
 pod install
 cd ..
 ```
-**4. Ejecutar la aplicación:**
+**4. Run the application:**
 
-Para arrancar el proyecto en el simulador de iPhone (iOS):
+To start the project on the iPhone simulator (iOS)::
 ```bash
 npx react-native run-ios --simulator="iPhone 17"
 ```
 
-Para arrancar el proyecto en el simulador de Android:
+To start the project on the Android emulator:
 ```bash
 npx react-native run-android
 ```
